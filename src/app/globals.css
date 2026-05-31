@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+:root {
+  --primary: #003d9b;
+  --primary-container: #0052cc;
+  --surface-highest: #d7e2ff;
+  --surface-low: #f1f3ff;
+  --background: #f9f9ff;
+  --slate-1: #c3c6d6;
+  --slate-2: #4f5f7b;
+  --slate-3: #041b3c;
+  --success: #82f9be;
+  --warning: #ffb300;
+  --error: #ba1a1a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-surface-highest: var(--surface-highest);
+  --color-surface-low: var(--surface-low);
+  --color-slate-1: var(--slate-1);
+  --color-slate-2: var(--slate-2);
+  --color-slate-3: var(--slate-3);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+}
+
+@utility display-lg {
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 56px;
+  letter-spacing: -2.8px;
+}
+@utility headline-lg {
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: 0px;
+}
+@utility title-md {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  letter-spacing: 0px;
+}
+@utility body-md {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 22.75px;
+  letter-spacing: 0px;
+}
+@utility label-sm {
+  font-weight: 700;
+  font-size: 11px;
+  line-height: 16.5px;
+  letter-spacing: 1.1px;
+}
