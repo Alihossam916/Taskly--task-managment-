@@ -11,7 +11,7 @@ const SignUp = () => {
       <SignUpForm />
       <div className="flex items-center gap-1">
         <p className="body-md text-slate-2">Already have an account?</p>
-        <Link href={"/login"} className="text-primary hover:underline">
+        <Link href={"/login"} className="text-primary font-bold hover:underline">
           Log in
         </Link>
       </div>
