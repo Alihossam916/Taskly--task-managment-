@@ -1,17 +1,18 @@
-import React from "react";
+import React, { ButtonHTMLAttributes } from "react";
 
-interface ButtonProp {
+interface ButtonProp extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   variant?: "primary" | "secondary" | "ghost";
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export default function Button({
   children,
   variant = "primary",
-  onClick,
+  className,
+  ...props
 }: ButtonProp) {
-  const styles = "w-32 px-4 py-2 font-semibold transition-all cursor-pointer";
+  const styles =
+    "w-32 px-4 py-2 font-semibold rounded-sm transition-all duration-200 cursor-pointer";
   const variants = {
     primary: "bg-primary text-white hover:bg-primary-container",
     secondary: "bg-background text-primary hover:bg-surface-highest",
@@ -19,7 +20,10 @@ export default function Button({
   };
 
   return (
-    <button onClick={onClick} className={`${styles} ${variants[variant]}`}>
+    <button
+      {...props}
+      className={`${styles} ${className} ${variants[variant]}`}
+    >
       {children}
     </button>
   );
