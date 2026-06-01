@@ -8,7 +8,7 @@ const SignUpLayout = ({
   return (
     <div className="bg-surface-low">
       <header className="p-6">
-        <Link href={"/home"} className="flex gap-2 items-center">
+        <Link href={"/home"} className="flex gap-2 items-center w-fit">
           <svg
             width="18"
             height="20"
