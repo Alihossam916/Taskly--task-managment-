@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 // import sign up api
-import signUpApi from "@/src/lib/api/auth";
+import { signUpApi } from "@/src/lib/api/auth";
 
 // import schemas
 import { signUpSchema, SignUpFormData } from "@/src/lib/schemas/signUpSchema";
@@ -22,6 +22,7 @@ import Spinner from "../../ui/spinner";
 import { EyeIcon } from "../../icons/eyeIcon";
 
 const SignUpForm = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const {
@@ -39,7 +40,7 @@ const SignUpForm = () => {
       await signUpApi(data);
       toast.success("Account created successfully!");
       reset();
-      redirect("/");
+      router.push("/");
     } catch {
       toast.error("Signup failed. Please try again.");
     } finally {
