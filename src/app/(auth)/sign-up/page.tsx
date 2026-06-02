@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const SignUp = () => {
   return (
-    <div className="flex flex-col items-center gap-4 py-12 rounded-sm bg-white max-w-xl mx-auto mb-12 shadow-lg">
+    <div className="flex flex-col items-center gap-4 py-12 rounded-sm sm:bg-white max-w-xl mx-auto mb-12 sm:shadow-lg">
       <h1 className="headline-lg">Create your workspace</h1>
       <p className="body-md text-slate-2">
         Join the editorial approach to task management.
