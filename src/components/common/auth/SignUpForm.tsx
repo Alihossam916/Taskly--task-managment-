@@ -73,12 +73,13 @@ const SignUpForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col w-full gap-6 mt-5 px-12"
+      className="flex flex-col w-full gap-6 mt-5"
     >
       {/* name field */}
       <div className="flex flex-col gap-2">
         <label htmlFor="name" className="uppercase label-sm">
-          name
+          <span className="hidden sm:inline">name</span>
+          <span className="sm:hidden">full name</span>
         </label>
         <Input
           {...register("name")}
@@ -112,7 +113,7 @@ const SignUpForm = () => {
       {/* job title field */}
       <div className="flex flex-col gap-2">
         <label htmlFor="job" className="uppercase label-sm">
-          Job Title (Optional)
+          Job Title <span className="hidden sm:inline">(Optional)</span>
         </label>
         <Input
           {...register("job")}
