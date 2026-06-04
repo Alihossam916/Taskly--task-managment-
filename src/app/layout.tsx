@@ -28,7 +28,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <ToastProvider />
         <RecoveryHandler />
-        {children}
+        <main className="flex-1 overflow-auto">{children}</main>
       </body>
     </html>
   );
