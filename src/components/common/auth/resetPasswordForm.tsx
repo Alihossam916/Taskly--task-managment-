@@ -47,7 +47,9 @@ const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
     setIsLoading(true);
     try {
       await resetPasswordApi(data, token);
-      toast.success("Your password has been updated successfully. You can now log in");
+      toast.success(
+        "Your password has been updated successfully. You can now log in",
+      );
       reset();
       router.push("/login");
     } catch {

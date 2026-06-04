@@ -27,7 +27,7 @@ export async function refreshAccessToken(): Promise<string | null> {
         body: JSON.stringify({
           refresh_token: refreshToken,
         }),
-      }
+      },
     );
 
     const data = await response.json();
@@ -43,7 +43,7 @@ export async function refreshAccessToken(): Promise<string | null> {
       await setAuthTokens(
         data.access_token,
         data.refresh_token || refreshToken, // Use new refresh_token if provided
-        data.expires_at
+        data.expires_at,
       );
       return data.access_token;
     }

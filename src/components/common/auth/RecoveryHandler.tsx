@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 export default function RecoveryHandler() {
   const router = useRouter();
- const handledRef = useRef(false);
+  const handledRef = useRef(false);
 
   useEffect(() => {
     if (handledRef.current) return;

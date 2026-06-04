@@ -2,8 +2,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-import { toast } from "react-toastify";
-
 import {
   forgotPasswordSchema,
   ForgotPasswordData,
@@ -42,6 +40,7 @@ const ForgotPasswordFrom = () => {
       email: "",
     },
   });
+  // perform a countdown for the resend button
   useEffect(() => {
     if (!submitted || countdown <= 0) return;
 
@@ -49,10 +48,10 @@ const ForgotPasswordFrom = () => {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          setCanResend(true);
+          setCanResend(true); // enable resend button after the countdown finishes
           return 0;
         }
-        return prev - 1;
+        return prev - 1; // decrement countdown by 1 second
       });
     }, 1000);
 

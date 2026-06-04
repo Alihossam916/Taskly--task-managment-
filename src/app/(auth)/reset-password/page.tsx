@@ -11,10 +11,15 @@ const ResetPassword = async ({
   if (!token) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4">
-        <p className="text-error body-md">Invalid or expired reset link.</p>
-        <Link href="/login" className="text-primary font-bold hover:underline">
-          Back to Login
-        </Link>
+        <div className="flex flex-col justify-center items-center gap-2 bg-white shadow-lg p-4 rounded-sm w-lg h-52 mb-32">
+          <p className="text-error body-md">Invalid or expired reset link.</p>
+          <Link
+            href="/login"
+            className="text-primary font-bold hover:underline"
+          >
+            Back to Login
+          </Link>
+        </div>
       </div>
     );
   }

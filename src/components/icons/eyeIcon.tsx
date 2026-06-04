@@ -12,4 +12,4 @@ export const EyeIcon = () => (
     />
   </svg>
 );
-export default EyeIcon
+export default EyeIcon;

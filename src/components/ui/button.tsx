@@ -2,7 +2,7 @@ import React, { ButtonHTMLAttributes } from "react";
 
 interface ButtonProp extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "ghost" |"disabled";
+  variant?: "primary" | "secondary" | "ghost" | "disabled";
 }
 
 export default function Button({
@@ -17,7 +17,7 @@ export default function Button({
     primary: "bg-primary text-white hover:bg-primary-container",
     secondary: "text-primary hover:bg-surface-highest",
     ghost: " text-slate-2",
-    disabled: "bg-surface-low"
+    disabled: "bg-surface-low",
   };
 
   return (

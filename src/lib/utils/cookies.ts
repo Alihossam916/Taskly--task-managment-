@@ -8,13 +8,13 @@ export async function setAuthTokens(
   accessToken: string,
   refreshToken: string,
   expiresAt: number, // Unix timestamp in seconds from API
-  rememberMe: boolean = false
+  rememberMe: boolean = false,
 ) {
   const cookieStore = await cookies();
 
   // Calculate max age in seconds
   const maxAge = expiresAt - Math.floor(Date.now() / 1000); // remaining time
-  
+
   // If remember me is checked, extend the refresh token expiry to 30 days
   const refreshMaxAge = rememberMe ? REMEMBER_ME_EXPIRY : maxAge;
 
@@ -35,7 +35,6 @@ export async function setAuthTokens(
     maxAge: refreshMaxAge,
     path: "/",
   });
-
 }
 
 export async function getAccessToken(): Promise<string | null> {

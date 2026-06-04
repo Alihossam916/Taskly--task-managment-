@@ -11,7 +11,10 @@ const Login = () => {
       <LoginForm />
       <div className="flex items-center gap-1 mt-32 sm:mt-0">
         <p className="body-md text-slate-2">Don&apos;t have an account? </p>
-        <Link href={"/sign-up"} className="text-primary font-bold hover:underline">
+        <Link
+          href={"/sign-up"}
+          className="text-primary font-bold hover:underline"
+        >
           Sign Up
         </Link>
       </div>

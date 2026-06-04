@@ -9,15 +9,15 @@ export default function Home() {
       <p className="title-md">Task Management Redefined</p>
       <p className="body-md">
         The quick brown fox jumps over the lazy dog. A sophisticated palette
-        defines hierarchy <br /> through temperature and tone rather than structural
-        containment.
+        defines hierarchy <br /> through temperature and tone rather than
+        structural containment.
       </p>
       <p className="label-sm">METADATA & SYSTEM LABELS</p>
-      <Button variant="primary" >click me</Button>
-      <Button variant="secondary" >click me</Button>
-      <Button variant="ghost" >click me</Button>
-      <Input variant="error" type="email" placeholder="type here"/>
-      <Input variant="primary" type="email" placeholder="type here"/>
+      <Button variant="primary">click me</Button>
+      <Button variant="secondary">click me</Button>
+      <Button variant="ghost">click me</Button>
+      <Input variant="error" type="email" placeholder="type here" />
+      <Input variant="primary" type="email" placeholder="type here" />
     </>
   );
 }
