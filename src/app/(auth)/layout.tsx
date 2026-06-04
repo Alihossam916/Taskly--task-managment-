@@ -6,7 +6,7 @@ const SignUpLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <div className="bg-surface-low">
+    <div className="bg-surface-low min-h-screen flex flex-col flex-1">
       <header className="p-6">
         <Link href={"/"} className="flex gap-2 items-center w-fit">
           <svg
