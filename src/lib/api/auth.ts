@@ -1,5 +1,7 @@
 import { SignUpFormData } from "@/src/lib/schemas/signUpSchema";
 import { LoginFormData } from "../schemas/loginSchema";
+import { ForgotPasswordData } from "../schemas/forgotPasswordSchema";
+import { ResetPasswordFormData } from "../schemas/resetPasswordSchema";
 
 const anonKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlraW5sb3J5emxjaWNwdGdmaGdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNDk5NDUsImV4cCI6MjA5NDkyNTk0NX0.4ZgCL5_mqy68v77T-UjXwnfSFKjooZ0kkqfhBKKISFE";
@@ -82,6 +84,54 @@ export async function loginApi(formData: LoginFormData) {
     return {
       error: {
         message: error instanceof Error ? error.message : "Login failed",
+      },
+    };
+  }
+}
+
+export async function forgotPasswordApi(formData: ForgotPasswordData) {
+  const { email } = formData;
+  try {
+    const response = await fetch(`${baseUrl}/auth/v1/recover`, {
+      method: "POST",
+      headers: {
+        apikey: anonKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+      }),
+    });
+  } catch (error) {
+    return {
+      error: {
+        message: error instanceof Error && error.message,
+      },
+    };
+  }
+}
+
+export async function resetPasswordApi(
+  formData: ResetPasswordFormData,
+  token: string,
+) {
+  const { password } = formData;
+  try {
+    const response = await fetch(`${baseUrl}/auth/v1/user`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        apikey: anonKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        password,
+      }),
+    });
+  } catch (error) {
+    return {
+      error: {
+        message: error instanceof Error && error.message,
       },
     };
   }
