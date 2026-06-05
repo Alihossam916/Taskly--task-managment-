@@ -2,6 +2,8 @@
 import Link from "next/link";
 import { useState } from "react";
 
+import { getUser } from "@/src/lib/api/auth";
+
 // components
 import AvatarDropdown from "../ui/avatarDropdown";
 import MobileNavbar from "./mobileNavbar";
@@ -14,6 +16,14 @@ import { toggleSidebar } from "@/src/lib/redux/feature/sidebarSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
+  let user = "";
+
+  async function getUserData(){
+    const response = await getUser();
+    if(response){
+      user = response
+    }
+  }
 
   return (
     <header className="p-2 border-b-2 border-slate-1">
@@ -31,7 +41,7 @@ const Header = () => {
             </h2>
           </Link>
         </div>
-        <AvatarDropdown />
+        <AvatarDropdown/>
       </div>
       <div className="sm:hidden">
         <MobileNavbar />
