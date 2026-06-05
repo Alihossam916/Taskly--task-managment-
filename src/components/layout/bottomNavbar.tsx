@@ -1,11 +1,15 @@
-import React from "react";
+"use client";
 import Link from "next/link";
 
 import { navLinks } from "@/src/lib/constants/navLinks";
 
+import { useSelector } from "react-redux";
+
 export const BottomNavbar = () => {
+  const extended = useSelector((state: any) => state.sidebar.extended);
+
   return (
-    <footer className="p-4 bg-surface-low sm:hidden">
+    <footer className={`p-4 bg-surface-low ${extended && "hidden"} sm:hidden`}>
       <ul className="flex items-center justify-between gap-2">
         {navLinks.map((link) => {
           return (
