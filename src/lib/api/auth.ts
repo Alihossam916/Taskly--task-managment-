@@ -3,10 +3,13 @@ import { LoginFormData } from "../schemas/loginSchema";
 import { ForgotPasswordData } from "../schemas/forgotPasswordSchema";
 import { ResetPasswordFormData } from "../schemas/resetPasswordSchema";
 
+import { clearAuthTokens } from "../utils/cookies";
+
 const anonKey =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlraW5sb3J5emxjaWNwdGdmaGdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNDk5NDUsImV4cCI6MjA5NDkyNTk0NX0.4ZgCL5_mqy68v77T-UjXwnfSFKjooZ0kkqfhBKKISFE";
 const baseUrl = "https://ykinloryzlcicptgfhgg.supabase.co";
 
+// sign up handler
 export async function signUpApi(formData: SignUpFormData) {
   const { email, password, name, job } = formData;
   try {
@@ -43,6 +46,7 @@ export async function signUpApi(formData: SignUpFormData) {
   }
 }
 
+// login handler
 export async function loginApi(formData: LoginFormData) {
   const { email, password } = formData;
   try {
@@ -89,6 +93,38 @@ export async function loginApi(formData: LoginFormData) {
   }
 }
 
+// logout handler
+export async function logoutApi(token: string) {
+  try {
+    const response = await fetch(`${baseUrl}/auth/v1/logout`, {
+      method: "POST",
+      headers: {
+        apikey: anonKey,
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      clearAuthTokens();
+      return {};
+    }
+    const data = await response.json();
+
+    return {
+      error: {
+        message: data.error?.message || "Logout failed",
+      },
+    };
+  } catch (error) {
+    return {
+      error: {
+        message: error instanceof Error ? error.message : "Login failed",
+      },
+    };
+  }
+}
+
+// forgot password handler
 export async function forgotPasswordApi(formData: ForgotPasswordData) {
   const { email } = formData;
   try {
@@ -111,6 +147,7 @@ export async function forgotPasswordApi(formData: ForgotPasswordData) {
   }
 }
 
+// reset password handler
 export async function resetPasswordApi(
   formData: ResetPasswordFormData,
   token: string,
