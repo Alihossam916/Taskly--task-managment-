@@ -9,15 +9,18 @@ import MobileNavbar from "./mobileNavbar";
 // icons
 import HamburgerMenuIcon from "../icons/hamburgerMenuIcon";
 
+import { useDispatch } from "react-redux";
+import { toggleSidebar } from "@/src/lib/redux/feature/sidebarSlice";
+
 const Header = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
 
   return (
     <header className="p-2 border-b-2 border-slate-1">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-1">
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => dispatch(toggleSidebar())}
             className="sm:hidden cursor-pointer p-4 hover:bg-slate-1 transition-colors duration-200 rounded-lg"
           >
             <HamburgerMenuIcon />
@@ -31,7 +34,7 @@ const Header = () => {
         <AvatarDropdown />
       </div>
       <div className="sm:hidden">
-        <MobileNavbar isOpen={isOpen} setIsOpen={setIsOpen} />
+        <MobileNavbar />
       </div>
     </header>
   );
