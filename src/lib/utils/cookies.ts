@@ -51,5 +51,4 @@ export async function clearAuthTokens() {
   const cookieStore = await cookies();
   cookieStore.delete("accessToken");
   cookieStore.delete("refreshToken");
-  cookieStore.delete("rememberMe");
 }
