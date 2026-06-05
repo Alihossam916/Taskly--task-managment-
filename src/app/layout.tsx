@@ -4,6 +4,7 @@ import "./globals.css";
 
 // providers
 import ToastProvider from "../providers/toastProvider";
+import StoreProvider from "./StoreProvider";
 
 // components
 import RecoveryHandler from "../components/common/auth/RecoveryHandler";
@@ -26,9 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <ToastProvider />
-        <RecoveryHandler />
-        <main className="flex-1 overflow-auto">{children}</main>
+        <StoreProvider>
+          <ToastProvider />
+          <RecoveryHandler />
+          {children}
+        </StoreProvider>
       </body>
     </html>
   );
