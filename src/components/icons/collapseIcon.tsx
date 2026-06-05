@@ -12,7 +12,7 @@ const CollapseIcon = ({ className }: { className?: string }) => {
     >
       <path
         d="M10 20L0 10L10 0L11.775 1.775L3.55 10L11.775 18.225L10 20Z"
-        fill="#041B3C"
+        fill="currentColor"
       />
     </svg>
   );
