@@ -78,7 +78,7 @@ const ForgotPasswordFrom = () => {
   const timeDisplay = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
 
   return (
-    <div className="gap-2 px-6 py-12 my-12 rounded-sm max-w-xl mx-auto sm:shadow-lg sm:bg-white">
+    <div className="gap-2 px-6 py-12 sm:mt-12 mb-12 rounded-sm max-w-xl mx-auto sm:shadow-lg sm:bg-white">
       <div className="w-full flex flex-col items-center bg-white sm:bg-transparent py-12 px-8 shadow-lg sm:shadow-none">
         <i className="mb-4 bg-primary-container/20 p-4 rounded-xl sm:hidden">
           <svg
