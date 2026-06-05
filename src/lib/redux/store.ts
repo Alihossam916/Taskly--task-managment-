@@ -1,8 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 export const makeStore = () => {
+  const dummyReducer = (state = {}) => state;
   return configureStore({
-    reducer: {},
+    reducer: {dummyReducer},
   })
 }
 
