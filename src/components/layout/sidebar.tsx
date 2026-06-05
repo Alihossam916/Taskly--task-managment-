@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 import { toast } from "react-toastify";
 
@@ -16,9 +15,14 @@ import LogoutIcon from "../icons/logoutIcon";
 import CollapseIcon from "../icons/collapseIcon";
 import ExpandIcon from "../icons/expandIcon";
 
+import { useSelector, useDispatch } from "react-redux";
+import { toggleSidebar } from "@/src/lib/redux/feature/sidebarSlice";
+
 const Sidebar = () => {
   const router = useRouter();
-  const [extended, setExtended] = useState(true);
+  // const [extended, setExtended] = useState(true);
+  const extended = useSelector((state: any) => state.sidebar.extended);
+  const dispatch = useDispatch();
 
   async function handleLogout() {
     const token = await getAccessToken();
@@ -73,7 +77,7 @@ const Sidebar = () => {
         <div>
           <button
             onClick={() => {
-              setExtended(!extended);
+              dispatch(toggleSidebar());
             }}
             className="group flex items-center gap-2 cursor-pointer hover:bg-white transition-colors duration-200 p-3 w-full rounded-sm"
           >
