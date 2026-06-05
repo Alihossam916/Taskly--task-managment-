@@ -1,6 +1,6 @@
 import React from "react";
 
-const CollapseIcon = ({ className }: { className: string }) => {
+const CollapseIcon = ({ className }: { className?: string }) => {
   return (
     <svg
       width="12"
