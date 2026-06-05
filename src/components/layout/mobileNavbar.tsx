@@ -12,17 +12,16 @@ import { getAccessToken } from "@/src/lib/utils/cookies";
 
 import { navLinks } from "@/src/lib/constants/navLinks";
 
-const MobileNavbar = ({
-  isOpen,
-  setIsOpen,
-}: {
-  isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
-}) => {
+import { useSelector, useDispatch } from "react-redux";
+import { toggleSidebar } from "@/src/lib/redux/feature/sidebarSlice";
+
+const MobileNavbar = () => {
   const router = useRouter();
+  const extended = useSelector((state: any) => state.sidebar.extended);
+  const dispatch = useDispatch();
 
   async function handleLogout() {
-    setIsOpen(false);
+    dispatch(toggleSidebar());
     const token = await getAccessToken();
     if (!token) {
       toast.error("No session found. Please log in again.");
@@ -41,22 +40,22 @@ const MobileNavbar = ({
   return (
     <>
       <div
-        onClick={() => setIsOpen(false)}
+        onClick={() => dispatch(toggleSidebar())}
         className={
           "fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 " +
-          (isOpen
+          (extended
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none")
         }
       />
 
       <aside
-        className={`${isOpen ? `translate-x-0` : `-translate-x-full`} fixed left-0 top-0 bg-surface-low z-60 transition-all duration-200`}
+        className={`${extended ? `translate-x-0` : `-translate-x-full`} fixed left-0 top-0 bg-surface-low z-60 transition-all duration-200`}
       >
         <nav className="w-64 h-screen p-4 flex flex-col justify-between">
           <div>
             <Link href={"/"} className="flex gap-2 items-center w-fit">
-              <Logo className="size-7"/>
+              <Logo className="size-7" />
               <h2 className="headline-lg font-bold uppercase">Taskly</h2>
             </Link>
 
@@ -66,7 +65,7 @@ const MobileNavbar = ({
                   <Link
                     key={link.name}
                     href={`${link.href}`}
-                    onClick={() => setIsOpen(false)}
+                    onClick={() => dispatch(toggleSidebar())}
                     className="group block w-full text-lg font-semibold text-foreground rounded-sm p-3 focus:bg-white hover:bg-white transition-colors duration-200 cursor-pointer"
                   >
                     <li className="flex items-center gap-2">
