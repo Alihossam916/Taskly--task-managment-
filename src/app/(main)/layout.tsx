@@ -9,13 +9,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div>
+    <>
       <Header />
       <div className="flex flex-1">
-        <Sidebar />
-        <main className="flex-1 overflow-auto">{children}</main>
+        {/* <Sidebar /> */}
+        <main>{children}</main>
       </div>
       <BottomNavbar />
-    </div>
+    </>
   );
 }
