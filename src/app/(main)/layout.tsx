@@ -12,7 +12,7 @@ export default function RootLayout({
     <>
       <Header />
       <div className="flex flex-1">
-        {/* <Sidebar /> */}
+        <Sidebar />
         <main>{children}</main>
       </div>
       <BottomNavbar />
