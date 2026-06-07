@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 // libs
 import { navLinks } from "@/src/lib/constants/navLinks";
 import { getAccessToken } from "@/src/lib/utils/cookies";
-import { logoutApi } from "@/src/lib/api/auth";
+import { logoutApi } from "@/src/lib/api/auth/logout";
 
 // icons
 import Logo from "../icons/logo";

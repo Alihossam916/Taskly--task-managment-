@@ -7,7 +7,7 @@ import LogoutIcon from "../icons/logoutIcon";
 
 import { toast } from "react-toastify";
 
-import { logoutApi } from "@/src/lib/api/auth";
+import { logoutApi } from "@/src/lib/api/auth/logout";
 import { getAccessToken } from "@/src/lib/utils/cookies";
 
 import { navLinks } from "@/src/lib/constants/navLinks";
