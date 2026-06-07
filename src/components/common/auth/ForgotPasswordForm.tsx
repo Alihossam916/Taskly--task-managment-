@@ -6,7 +6,7 @@ import {
   forgotPasswordSchema,
   ForgotPasswordData,
 } from "@/src/lib/schemas/forgotPasswordSchema";
-import { forgotPasswordApi } from "@/src/lib/api/auth";
+import { forgotPasswordApi } from "@/src/lib/api/auth/forgotPassword";
 
 // form handlers
 import { useForm, SubmitHandler } from "react-hook-form";
