@@ -3,11 +3,12 @@
 const baseUrl = process.env.SUPABASE_URL!;
 const anonKey = process.env.SUPABASE_ANON_KEY!;
 
-export async function getUser() {
+export async function getUser(token: string | null) {
   try {
     const response = await fetch(`${baseUrl}/auth/v1/user`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         apikey: anonKey,
         "Content-Type": "application/json",
       },
