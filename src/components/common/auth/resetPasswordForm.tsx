@@ -5,7 +5,8 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 
 // import sign up api
-import { resetPasswordApi } from "@/src/lib/api/auth";
+import { resetPasswordApi } from "@/src/lib/api/auth/resetPassword";
+
 // import schemas
 import {
   resetPasswordSchema,
