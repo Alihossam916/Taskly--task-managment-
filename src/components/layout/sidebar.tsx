@@ -46,7 +46,7 @@ const Sidebar = () => {
         className={`${extended ? "w-64" : "w-20"} flex flex-col justify-between h-screen bg-surface-low p-4 transition-all duration-300`}
       >
         <div>
-          <Link href={"/"} className="flex gap-2 items-center w-fit ml-2">
+          <Link href={"/project"} className="flex gap-2 items-center w-fit ml-2">
             <Logo className="size-7" />
             {extended && (
               <h2 className="headline-lg font-bold uppercase">Taskly</h2>
