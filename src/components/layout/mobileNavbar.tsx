@@ -54,7 +54,7 @@ const MobileNavbar = () => {
       >
         <nav className="w-64 h-screen p-4 flex flex-col justify-between">
           <div>
-            <Link href={"/"} className="flex gap-2 items-center w-fit">
+            <Link href={"/project"} className="flex gap-2 items-center w-fit">
               <Logo className="size-7" />
               <h2 className="headline-lg font-bold uppercase">Taskly</h2>
             </Link>
