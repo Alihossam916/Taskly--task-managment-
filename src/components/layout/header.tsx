@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import { getUser } from "@/src/lib/api/auth";
+import { getUser } from "@/src/lib/api/auth/getUser";
 
 // components
 import AvatarDropdown from "../ui/avatarDropdown";
@@ -36,7 +36,7 @@ const Header = () => {
             <HamburgerMenuIcon />
           </button>
           <Link href={"/"}>
-            <h2 className="sm:invisible uppercase headline-lg text-slate-3 font-bold">
+            <h2 className="sm:invisible sm:cursor-none uppercase headline-lg text-slate-3 font-bold">
               taskly
             </h2>
           </Link>
