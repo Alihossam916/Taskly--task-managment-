@@ -14,12 +14,12 @@ export function proxy(request: NextRequest) {
 
   // Logged in and on root → redirect to /projects
   if (isLoggedIn && pathname === "/") {
-    return NextResponse.redirect(new URL("/projects", request.url));
+    return NextResponse.redirect(new URL("/project", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/projects/:path*"],
+  matcher: ["/", "/project/:path*"],
 };
