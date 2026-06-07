@@ -2,9 +2,8 @@
 
 import { getRefreshToken, setAuthTokens, clearAuthTokens } from "./cookies";
 
-const anonKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlraW5sb3J5emxjaWNwdGdmaGdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNDk5NDUsImV4cCI6MjA5NDkyNTk0NX0.4ZgCL5_mqy68v77T-UjXwnfSFKjooZ0kkqfhBKKISFE";
-const baseUrl = "https://ykinloryzlcicptgfhgg.supabase.co";
+const baseUrl = process.env.SUPABASE_URL!;
+const anonKey = process.env.SUPABASE_ANON_KEY!;
 
 export async function refreshAccessToken(): Promise<string | null> {
   try {
