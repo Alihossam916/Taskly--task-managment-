@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { getUser } from "@/src/lib/api/auth/getUser";
+import { getAccessToken } from "@/src/lib/utils/cookies";
 
 // components
 import AvatarDropdown from "../ui/avatarDropdown";
@@ -16,14 +17,18 @@ import { toggleSidebar } from "@/src/lib/redux/feature/sidebarSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
-  let user = "";
+  const [user, setUser] = useState<{ name: string; job: string } | null>(null);
 
-  async function getUserData(){
-    const response = await getUser();
-    if(response){
-      user = response
-    }
-  }
+  useEffect(() => {
+    getAccessToken().then((token) => {
+      if (!token) return;
+      getUser(token).then((response) => {
+        if (response) {
+          setUser(response.user_metadata);
+        }
+      });
+    });
+  }, []);
 
   return (
     <header className="p-2 border-b-2 border-slate-1">
@@ -35,13 +40,19 @@ const Header = () => {
           >
             <HamburgerMenuIcon />
           </button>
-          <Link href={"/"}>
+          <Link href={"/project"}>
             <h2 className="sm:invisible sm:cursor-none uppercase headline-lg text-slate-3 font-bold">
               taskly
             </h2>
           </Link>
         </div>
-        <AvatarDropdown/>
+        <div className="flex items-center gap-4">
+          <div className="flex-col items-end hidden sm:flex">
+            <p className="body-md font-bold">{user?.name}</p>
+            <p className="label-sm uppercase text-primary">{user?.job}</p>
+          </div>
+          <AvatarDropdown user={user} />
+        </div>
       </div>
       <div className="sm:hidden">
         <MobileNavbar />
