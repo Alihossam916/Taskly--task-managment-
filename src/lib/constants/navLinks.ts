@@ -10,7 +10,7 @@ export const navLinks = [
     desktopName:"Projects",
     name: "Projects",
     icon: ProjectsIcon,
-    href: "/projects",
+    href: "/project",
   },
   {
     desktopName:"Project Epics",
