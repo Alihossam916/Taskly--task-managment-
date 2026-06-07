@@ -7,17 +7,16 @@ import { logoutApi } from "@/src/lib/api/auth/logout";
 import { getAccessToken } from "@/src/lib/utils/cookies";
 
 interface AvatarDropdownProps {
-  userName?: string;
+  user?: { name: string } | null;
 }
 
-export default function AvatarDropdown({
-  userName = "John Doe",
-}: AvatarDropdownProps) {
+export default function AvatarDropdown({ user }: AvatarDropdownProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const initials = userName
+  const name = user?.name ?? "john doe";
+  const initials = name
     .split(" ")
     .map((n) => n[0])
     .join("")
