@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 // import sign up api
-import { signUpApi } from "@/src/lib/api/auth";
+import { signUpApi } from "@/src/lib/api/auth/signUp";
 
 // import schemas
 import { signUpSchema, SignUpFormData } from "@/src/lib/schemas/signUpSchema";
