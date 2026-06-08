@@ -16,7 +16,7 @@ export default function MainContent({ children }: { children: ReactNode }) {
 
   return (
     <div
-      className={`overflow-hidden xs:overflow-visible transition-all duration-300 p-4 w-full ${
+      className={`overflow-hidden xs:overflow-visible transition-all duration-300 p-4 w-full bg-background ${
         screenWidth < 640
           ? "ml-0" // No margin on mobile
           : extended
