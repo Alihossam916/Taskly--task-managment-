@@ -1,6 +1,7 @@
 import React from "react";
+import { ClassNameProp } from "@/src/types/propType";
 
-const LogoMobile = ({ className }: { className?: string }) => {
+const LogoMobile = ({ className }: ClassNameProp) => {
   return (
     <svg
       width="18"

@@ -1,6 +1,7 @@
 import React from "react";
+import { ClassNameProp } from "@/src/types/propType";
 
-const ProjectsIcon = ({ className }: { className?: string }) => {
+const ProjectsIcon = ({ className }: ClassNameProp) => {
   return (
     <svg
       width="18"
