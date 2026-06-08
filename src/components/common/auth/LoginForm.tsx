@@ -68,7 +68,7 @@ const LoginForm = () => {
         reset();
 
         // Redirect to main page
-        router.push("/");
+        router.push("/project");
       }
     } catch (error) {
       toast.error("Login failed. Please try again.");

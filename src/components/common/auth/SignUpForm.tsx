@@ -40,7 +40,7 @@ const SignUpForm = () => {
       await signUpApi(data);
       toast.success("Account created successfully!");
       reset();
-      router.push("/");
+      router.push("/project");
     } catch {
       toast.error("Signup failed. Please try again.");
     } finally {
