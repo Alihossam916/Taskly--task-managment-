@@ -1,4 +1,27 @@
+import Link from "next/link";
+
+// icon
+import NoProjectsIcon from "@/src/components/icons/noProjectsIcon";
+import CircledPlus from "@/src/components/icons/circledPlus";
+
+// component
+import Button from "@/src/components/ui/button";
 
 export default function Project() {
-  return <div></div>;
+  return (
+    <div className="flex flex-col gap-8 items-center mx-auto my-20">
+      <NoProjectsIcon />
+      <h1 className="headline-lg text-slate-3">No Projects</h1>
+      <p className="body-md text-slate-2 text-center font-semibold">
+        You don&apos;t have any projects yet. Start by defining <br /> your first
+        architectural workspace to begin tracking <br /> tasks and epics.
+      </p>
+      <Link href={"/project/add"}>
+      <Button className="flex items-center gap-2 w-fit rounded-xs!">
+        <CircledPlus />
+        <span>Create New Project</span>
+      </Button>
+      </Link>
+    </div>
+  );
 }
