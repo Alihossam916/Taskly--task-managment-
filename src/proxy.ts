@@ -7,24 +7,35 @@ export function proxy(request: NextRequest) {
 
   const isLoggedIn = !!accessToken;
 
-  // Not logged in → redirect to /login (except if already there)
-  if (!isLoggedIn && pathname === "/project") {
+  // Auth pages that don't require login
+  const authPaths = [
+    "/login",
+    "/signup",
+    "/forgot-password",
+    "/reset-password",
+  ];
+  const isAuthPage = authPaths.includes(pathname);
+
+  // Not logged in → redirect to login, except for auth pages
+  if (!isLoggedIn && !isAuthPage) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Logged in and on root → redirect to /projects
+  // Logged in and on root → redirect to /project
   if (isLoggedIn && pathname === "/") {
     return NextResponse.redirect(new URL("/project", request.url));
   }
-
-  // Not logged in and on root → redirect to /projects
-  if (!isLoggedIn && pathname === "/") {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
-
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/", "/project/:path*"],
+  matcher: [
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
 };
