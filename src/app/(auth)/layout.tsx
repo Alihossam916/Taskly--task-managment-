@@ -11,7 +11,7 @@ const SignUpLayout = ({
 }>) => {
   return (
     <div className="bg-surface-low min-h-screen flex flex-col flex-1">
-      <header className="p-6">
+      <header className="p-6 bg-background">
         <Link href={"/project"} className="flex gap-2 items-center w-fit">
           <Logo className="hidden sm:block" />
           <LogoMobile className="sm:hidden" />
