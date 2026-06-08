@@ -8,13 +8,18 @@ export function proxy(request: NextRequest) {
   const isLoggedIn = !!accessToken;
 
   // Not logged in → redirect to /login (except if already there)
-  if (!isLoggedIn && pathname !== "/login") {
+  if (!isLoggedIn && pathname === "/project") {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
   // Logged in and on root → redirect to /projects
   if (isLoggedIn && pathname === "/") {
     return NextResponse.redirect(new URL("/project", request.url));
+  }
+
+  // Not logged in and on root → redirect to /projects
+  if (!isLoggedIn && pathname === "/") {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   return NextResponse.next();
