@@ -12,7 +12,7 @@ export default function Button({
   ...props
 }: ButtonProp) {
   const styles =
-    "w-32 px-4 py-4 sm:py-3 font-semibold rounded-xl sm:rounded-sm transition-all duration-200 cursor-pointer";
+    "px-4 py-4 sm:py-3 font-semibold rounded-xl sm:rounded-sm transition-all duration-200 cursor-pointer";
   const variants = {
     primary: "bg-primary text-white hover:bg-primary-container",
     secondary: "text-primary hover:bg-surface-highest",
