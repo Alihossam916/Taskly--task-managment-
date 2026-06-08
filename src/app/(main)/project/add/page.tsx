@@ -15,7 +15,7 @@ const AddProject = () => {
           Add new projects
         </p>
       </div>
-      <div className="flex items-center justify-between">
+      <div className="hidden sm:flex items-center justify-between">
         <h1 className="headline-lg text-slate-3">Add New Project</h1>
         <Button className="w-fit flex items-center gap-2 rounded-xs!">
           <AddMemberIcon />
