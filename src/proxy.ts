@@ -1,20 +1,21 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { refreshAccessToken } from "./lib/utils/tokenRefresh";
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const accessToken = request.cookies.get("accessToken")?.value;
-
-  const isLoggedIn = !!accessToken;
+  const refreshToken = request.cookies.get("refreshToken")?.value;
 
   // Auth pages that don't require login
   const authPaths = [
     "/login",
-    "/signup",
+    "/sign-up",
     "/forgot-password",
     "/reset-password",
   ];
   const isAuthPage = authPaths.includes(pathname);
+  const isLoggedIn = !!accessToken;
 
   // Not logged in → redirect to login, except for auth pages
   if (!isLoggedIn && !isAuthPage) {
@@ -25,6 +26,21 @@ export function proxy(request: NextRequest) {
   if (isLoggedIn && pathname === "/") {
     return NextResponse.redirect(new URL("/project", request.url));
   }
+
+  // Logged in and on auth pages → redirect to /project
+  if (isLoggedIn && isAuthPage) {
+    return NextResponse.redirect(new URL("/project", request.url));
+  }
+
+  // If accessToken is missing/expired but refreshToken exists, refresh it
+  if (!accessToken && refreshToken && !isAuthPage) {
+    try {
+      await refreshAccessToken();
+    } catch {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+  }
+  
   return NextResponse.next();
 }
 
