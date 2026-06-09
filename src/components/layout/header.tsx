@@ -32,16 +32,16 @@ const Header = () => {
 
   return (
     <header className="p-2 border-b-2 border-slate-1">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-1">
+      <div className="flex justify-between sm:justify-end items-center">
+        <div className="flex sm:hidden items-center gap-1">
           <button
             onClick={() => dispatch(toggleSidebar())}
-            className="sm:hidden cursor-pointer p-4 hover:bg-slate-1 transition-colors duration-200 rounded-lg"
+            className="cursor-pointer p-4 hover:bg-slate-1 transition-colors duration-200 rounded-lg"
           >
             <HamburgerMenuIcon />
           </button>
           <Link href={"/project"}>
-            <h2 className="sm:invisible sm:cursor-none uppercase headline-lg text-slate-3 font-bold">
+            <h2 className="uppercase headline-lg text-slate-3 font-bold">
               taskly
             </h2>
           </Link>
