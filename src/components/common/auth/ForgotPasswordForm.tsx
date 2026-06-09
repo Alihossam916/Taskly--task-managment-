@@ -133,7 +133,7 @@ const ForgotPasswordFrom = () => {
           {/* submit button */}
           <Button
             type="submit"
-            className="w-full flex justify-center items-center rounded-sm! gap-2"
+            className={`w-full flex justify-center items-center rounded-sm! gap-2 ${isLoading && `opacity-70 cursor-not-allowed!`}`}
             disabled={isLoading}
           >
             {isLoading && <Spinner />}

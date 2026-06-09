@@ -25,6 +25,7 @@ import Link from "next/link";
 import ProTipIcon from "../../icons/proTipIcon";
 import Textarea from "../../ui/textarea";
 import ValidationErrorIcon from "../../icons/validationErrorIcon";
+import Spinner from "../../ui/spinner";
 
 const AddNewProject = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -101,7 +102,6 @@ const AddNewProject = () => {
               {...register("description")}
               id="email"
               placeholder="Provide a high-level overview of the project's architectural objectives and key milestones..."
-              required
               variant={errors.name ? "error" : "primary"}
             />
             <div className="flex flex-col sm:flex-row justify-between items-center">
@@ -128,8 +128,12 @@ const AddNewProject = () => {
               Back
             </Button>
           </Link>
-          <Button className="capitalize w-full sm:w-48 rounded-xs!">
-            create project
+          <Button
+            disabled={isLoading}
+            className={`capitalize w-full sm:w-48 rounded-xs! flex items-center justify-center gap-2 text-center ${isLoading && `opacity-70 cursor-not-allowed!`}`}
+          >
+            {isLoading && <Spinner />}
+            <span>create project</span>
           </Button>
         </div>
       </form>
