@@ -9,7 +9,7 @@ export const BottomNavbar = () => {
   const extended = useSelector((state: any) => state.sidebar.extended);
 
   return (
-    <footer className={`p-4 bg-surface-low ${extended && "hidden"} sm:hidden`}>
+    <footer className={`fixed bottom-0 w-full p-4 bg-surface-low ${extended && "hidden"} sm:hidden`}>
       <ul className="flex items-center justify-between gap-2">
         {navLinks.map((link) => {
           return (
