@@ -4,3 +4,9 @@ export interface Project {
   description?: string;
   created_at: string;
 }
+export interface ProjectListProps {
+  projects: Project[];
+  total: number;
+  currentPage: number;
+  limit: number;
+}
