@@ -55,7 +55,7 @@ const AddNewProject = () => {
   };
 
   return (
-    <div className="sm:bg-white w-fit mx-auto rounded-lg mt-10">
+    <div className="sm:bg-white w-fit mx-auto rounded-lg my-10">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-16 sm:p-8">
         <div className="flex items-center gap-4">
           <NewProjectIcon className="bg-primary-container/10 size-10 p-2 rounded-xs hidden sm:block" />
