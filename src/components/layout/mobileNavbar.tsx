@@ -16,8 +16,6 @@ import { toast } from "react-toastify";
 import { logoutApi } from "@/src/lib/api/auth/logout";
 import { getAccessToken } from "@/src/lib/utils/cookies";
 
-import { navLinks } from "@/src/lib/constants/navLinks";
-
 // redux
 import { useSelector, useDispatch } from "react-redux";
 import { toggleSidebar } from "@/src/lib/redux/feature/sidebarSlice";
