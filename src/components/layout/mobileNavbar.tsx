@@ -1,24 +1,75 @@
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams, usePathname } from "next/navigation";
 
 // icons
 import Logo from "../icons/logo";
 import LogoutIcon from "../icons/logoutIcon";
+import ProjectsIcon from "@/src/components/icons/projectsIcon";
+import ProjectEpicsIcon from "@/src/components/icons/projectEpicsIcon";
+import DetailsIcon from "@/src/components/icons/detailsIcon";
+import TasksIcon from "@/src/components/icons/tasksIcon";
+import MembersIcon from "@/src/components/icons/membersIcon";
 
 import { toast } from "react-toastify";
 
+// lib
 import { logoutApi } from "@/src/lib/api/auth/logout";
 import { getAccessToken } from "@/src/lib/utils/cookies";
 
 import { navLinks } from "@/src/lib/constants/navLinks";
 
+// redux
 import { useSelector, useDispatch } from "react-redux";
 import { toggleSidebar } from "@/src/lib/redux/feature/sidebarSlice";
 
 const MobileNavbar = () => {
+  const { projectId } = useParams();
+  const pathname = usePathname();
+
   const router = useRouter();
   const extended = useSelector((state: any) => state.sidebar.extended);
   const dispatch = useDispatch();
+
+  const globalLinks = [
+    {
+      name: "Projects",
+      icon: ProjectsIcon,
+      href: "/project",
+      desktopName: "Projects",
+    },
+  ];
+
+  // 2. Links that ONLY show when a project is clicked
+  const projectSpecificLinks = projectId
+    ? [
+        {
+          name: "Epics",
+          icon: ProjectEpicsIcon,
+          href: `/project/${projectId}/epics`,
+          desktopName: "Project Epics",
+        },
+        {
+          name: "Tasks",
+          icon: TasksIcon,
+          href: `/project/${projectId}/tasks`,
+          desktopName: "Project Tasks",
+        },
+        {
+          name: "Members",
+          icon: MembersIcon,
+          href: `/project/${projectId}/members`,
+          desktopName: "Project Members",
+        },
+        {
+          name: "Details",
+          icon: DetailsIcon,
+          href: `/project/${projectId}/edit`,
+          desktopName: "Project Details",
+        },
+      ]
+    : [];
+
+  const allVisibleLinks = [...globalLinks, ...projectSpecificLinks];
 
   async function handleLogout() {
     dispatch(toggleSidebar());
@@ -60,16 +111,26 @@ const MobileNavbar = () => {
             </Link>
 
             <ul className="space-y-2 mt-5">
-              {navLinks.map((link) => {
+              {allVisibleLinks.map((link) => {
+                const isActive =
+                  pathname === link.href ||
+                  (link.href !== "/project" && pathname.startsWith(link.href));
+
                 return (
                   <Link
                     key={link.name}
                     href={`${link.href}`}
                     onClick={() => dispatch(toggleSidebar())}
-                    className="group block w-full text-lg font-semibold text-foreground rounded-sm p-3 focus:bg-white hover:bg-white transition-colors duration-200 cursor-pointer"
+                    className={`group block w-full text-lg font-semibold text-foreground rounded-sm p-3 transition-colors duration-200 cursor-pointer ${isActive ? "text-primary-container! bg-white" : "group-hover:text-primary-container!"}`}
                   >
                     <li className="flex items-center gap-2">
-                      <link.icon className="group-hover:text-primary-container group-focus:text-primary-container" />
+                      <link.icon
+                        className={
+                          isActive
+                            ? "text-primary-container!"
+                            : "group-hover:text-primary-container!"
+                        }
+                      />
                       <span className="group-hover:text-primary">
                         {link.desktopName}
                       </span>
