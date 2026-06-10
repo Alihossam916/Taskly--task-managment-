@@ -2,10 +2,16 @@
 // utils
 import { getAccessToken } from "../../utils/cookies";
 
+// types
+import { Project } from "@/src/types/projectType";
+
 const baseUrl = process.env.SUPABASE_URL!;
 const anonKey = process.env.SUPABASE_ANON_KEY!;
 
-export async function getProjects(limit: number, offset: number) {
+export async function getProjects(
+  limit: number,
+  offset: number,
+): Promise<{ projects: Project[]; total: number }> {
   const token: string | null = await getAccessToken();
 
   try {
@@ -27,6 +33,7 @@ export async function getProjects(limit: number, offset: number) {
         Number(response.headers.get("content-range")?.split("/")[1]) || 0;
       return { projects, total };
     }
+    throw new Error("Failed to fetch projects");
   } catch (error) {
     throw new Error(
       error instanceof Error ? error.message : "Failed to fetch projects",
