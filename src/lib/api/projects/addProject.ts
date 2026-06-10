@@ -24,8 +24,8 @@ export async function addProjectApi(formData: AddProjectFormData) {
       }),
     });
     if (response.ok) {
-      const user = await response.json();
-      return user;
+      const project = await response.json();
+      return project;
     }
   } catch (error) {
     return {
