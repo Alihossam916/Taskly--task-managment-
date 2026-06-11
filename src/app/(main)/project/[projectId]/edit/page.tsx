@@ -19,13 +19,16 @@ async function ProjectEditPage({ params }: Props) {
   const project = await getProjectById(projectId);
 
   return (
-    <div>
+    <div className="mb-30 mt-5">
       <div className="flex items-center gap-2">
         <Link href={"/project"} className="uppercase label-sm text-slate-2">
           Projects
         </Link>
         <span className="text-slate-1">{">"}</span>
-        <Link href={`/project/${projectId}/epics`} className="uppercase label-sm text-slate-2">
+        <Link
+          href={`/project/${projectId}/epics`}
+          className="uppercase label-sm text-slate-2"
+        >
           {project?.name}
         </Link>
         <span className="text-slate-1">{">"}</span>
