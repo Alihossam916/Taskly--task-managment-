@@ -1,13 +1,13 @@
 "use server";
 import { getAccessToken } from "../../utils/cookies";
-import { Project } from "@/src/types/projectType";
+import { Member } from "@/src/types/projectType";
 
 const baseUrl = process.env.SUPABASE_URL!;
 const anonKey = process.env.SUPABASE_ANON_KEY!;
 
 export async function getProjectMembers(
   projectId: string,
-): Promise<Project | null> {
+): Promise<Member[] | null> {
   const token = await getAccessToken();
   try {
     const response = await fetch(
