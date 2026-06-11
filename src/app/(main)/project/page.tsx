@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Suspense } from "react";
 
 // lib
 import { getProjects } from "@/src/lib/api/projects/getProjects";
@@ -9,9 +10,8 @@ import CircledPlus from "@/src/components/icons/circledPlus";
 
 // components
 import Button from "@/src/components/ui/button";
-
-// types
 import ProjectList from "@/src/components/common/projects/projectList";
+import ProjectSkeleton from "@/src/components/common/projects/projectSkeleton";
 
 export default async function ProjectPage({
   searchParams,
@@ -45,11 +45,13 @@ export default async function ProjectPage({
   }
 
   return (
-    <ProjectList
-      projects={projects}
-      total={total}
-      currentPage={currentPage}
-      limit={limit}
-    />
+    <Suspense fallback={<ProjectSkeleton />}>
+      <ProjectList
+        projects={projects}
+        total={total}
+        currentPage={currentPage}
+        limit={limit}
+      />
+    </Suspense>
   );
 }
