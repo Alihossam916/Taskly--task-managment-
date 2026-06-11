@@ -10,3 +10,14 @@ export interface ProjectListProps {
   currentPage: number;
   limit: number;
 }
+export interface MemberMetadata {
+  name: string;
+  email: string;
+}
+
+export interface Member {
+  member_id: string;
+  email: string;
+  role: string;
+  metadata: MemberMetadata;
+}
