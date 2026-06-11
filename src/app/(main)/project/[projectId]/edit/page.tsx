@@ -14,7 +14,7 @@ interface Props {
   params: Promise<{ projectId: string }>;
 }
 
-export async function ProjectEditPage({ params }: Props) {
+async function ProjectEditPage({ params }: Props) {
   const { projectId } = await params;
   const project = await getProjectById(projectId);
 
