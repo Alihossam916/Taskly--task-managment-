@@ -32,7 +32,7 @@ async function ProjectEditPage({ params }: Props) {
         <p className="uppercase label-sm text-primary">edit</p>
       </div>
       <div className="hidden sm:flex items-center justify-between">
-        <h1 className="headline-lg text-slate-3">Add New Project</h1>
+        <h1 className="headline-lg text-slate-3">Edit Project</h1>
         <Button className="w-fit flex items-center gap-2 rounded-xs!">
           <AddMemberIcon />
           <span>Invite Member</span>
