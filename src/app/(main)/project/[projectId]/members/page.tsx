@@ -9,6 +9,7 @@ import Badge from "@/src/components/ui/badge";
 
 // lib
 import { getProjectById } from "@/src/lib/api/projects/getProjectById";
+import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
 import EditIcon from "@/src/components/icons/editIcon";
 
 interface Props {
@@ -18,29 +19,7 @@ interface Props {
 const ProjectMembersPage = async ({ params }: Props) => {
   const { projectId } = await params;
   const project = await getProjectById(projectId);
-
-  const members = [
-    {
-      name: "Mahmoud Taha",
-      email: "mahmoud.taha.dev@gmail.com",
-      role: "owner",
-    },
-    {
-      name: "Sarah Jenkins",
-      email: "s.jenkins@workspace.com",
-      role: "admin",
-    },
-    {
-      name: "David Lee",
-      email: "d.lee@workspace.com",
-      role: "member",
-    },
-    {
-      name: "Alisa Mayer",
-      email: "a.mayer@workspace.com",
-      role: "viewer",
-    },
-  ];
+  const members = await getProjectMembers(projectId);
 
   return (
     <div className="mb-30 mt-5">
@@ -85,16 +64,19 @@ const ProjectMembersPage = async ({ params }: Props) => {
                 </tr>
               </thead>
               <tbody className="bg-white">
-                {members.map((member, index) => {
-                  const initials = member.name
+                {members?.map((member) => {
+                  const initials = (member.metadata.name || "Unknown Member")
                     .split(" ")
-                    .map((n) => n[0])
+                    .map((n: string) => n[0])
                     .join("")
                     .toUpperCase()
                     .slice(0, 2);
 
                   return (
-                    <tr key={index} className="border border-slate-1">
+                    <tr
+                      key={member.member_id}
+                      className="border border-slate-1"
+                    >
                       <td className="py-4 px-4 md:px-10">
                         <div className="flex items-center gap-3 md:gap-4">
                           <div className="title-md font-bold size-10 md:size-12 rounded-xl bg-primary-container/30 text-primary flex items-center justify-center shrink-0">
@@ -102,7 +84,7 @@ const ProjectMembersPage = async ({ params }: Props) => {
                           </div>
                           <div className="min-w-0">
                             <p className="body-md font-semibold text-slate-3 truncate">
-                              {member.name}
+                              {member.metadata.name}
                             </p>
                             <p className="body-md text-slate-2 truncate">
                               {member.email}
@@ -129,17 +111,17 @@ const ProjectMembersPage = async ({ params }: Props) => {
 
           {/* Mobile cards */}
           <div className="sm:hidden space-y-4 mt-6">
-            {members.map((member, index) => {
-              const initials = member.name
+            {members?.map((member) => {
+              const initials = (member.metadata.name || "Unknown Member")
                 .split(" ")
-                .map((n) => n[0])
+                .map((n: string) => n[0])
                 .join("")
                 .toUpperCase()
                 .slice(0, 2);
 
               return (
                 <div
-                  key={index}
+                  key={member.member_id}
                   className="bg-white rounded-sm p-4 flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
@@ -148,7 +130,7 @@ const ProjectMembersPage = async ({ params }: Props) => {
                     </div>
                     <div className="flex flex-col">
                       <p className="body-md font-semibold text-slate-3">
-                        {member.name}
+                        {member.metadata.name}
                       </p>
                       <p className="body-md text-slate-2 truncate">
                         {member.email}
