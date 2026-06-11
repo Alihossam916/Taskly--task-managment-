@@ -15,7 +15,7 @@ export async function proxy(request: NextRequest) {
     "/reset-password",
   ];
   const isAuthPage = authPaths.includes(pathname);
-  const isLoggedIn = !!accessToken;
+  const isLoggedIn = !!accessToken || !!refreshToken;
 
   // Not logged in → redirect to login, except for auth pages
   if (!isLoggedIn && !isAuthPage) {
@@ -35,12 +35,14 @@ export async function proxy(request: NextRequest) {
   // If accessToken is missing/expired but refreshToken exists, refresh it
   if (!accessToken && refreshToken && !isAuthPage) {
     try {
-      await refreshAccessToken();
+      const newToken = await refreshAccessToken();
+      if (newToken) {
+        return NextResponse.redirect(request.url);
+      }
     } catch {
       return NextResponse.redirect(new URL("/login", request.url));
     }
   }
-  
   return NextResponse.next();
 }
 
