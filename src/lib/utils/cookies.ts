@@ -18,6 +18,12 @@ export async function setAuthTokens(
   // If remember me is checked, extend the refresh token expiry to 30 days
   const refreshMaxAge = rememberMe ? REMEMBER_ME_EXPIRY : maxAge;
 
+  cookieStore.set("rememberMe", rememberMe ? "true" : "false", {
+    httpOnly: true,
+    maxAge: refreshMaxAge,
+    path: "/",
+  });
+  
   // Store access token with API-provided expiry
   cookieStore.set("accessToken", accessToken, {
     httpOnly: true, // Prevent JavaScript access (secure against XSS)
