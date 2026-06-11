@@ -25,7 +25,11 @@ export async function ProjectEditPage({ params }: Props) {
           Projects
         </Link>
         <span className="text-slate-1">{">"}</span>
-        <p className="uppercase label-sm text-primary">edit project</p>
+        <Link href={`/project/${projectId}/epics`} className="uppercase label-sm text-slate-2">
+          {project?.name}
+        </Link>
+        <span className="text-slate-1">{">"}</span>
+        <p className="uppercase label-sm text-primary">edit</p>
       </div>
       <div className="hidden sm:flex items-center justify-between">
         <h1 className="headline-lg text-slate-3">Add New Project</h1>
