@@ -1,5 +1,5 @@
 "use server";
-
+import { cookies } from "next/headers";
 import { getRefreshToken, setAuthTokens, clearAuthTokens } from "./cookies";
 
 const baseUrl = process.env.SUPABASE_URL!;
@@ -37,16 +37,23 @@ export async function refreshAccessToken(): Promise<string | null> {
       return null;
     }
 
-    if (data.access_token && data.expires_at) {
-      // Store the new access token with API-provided expiry
-      await setAuthTokens(
-        data.access_token,
-        data.refresh_token || refreshToken, // Use new refresh_token if provided
-        data.expires_at,
-      );
-      return data.access_token;
-    }
+    const accessToken = data.access_token;
+    const newRefreshToken = data.refresh_token || refreshToken;
+    const expiresAt =
+      data.expires_at || Math.floor(Date.now() / 1000) + data.expires_in;
 
+    if (accessToken) {
+      const cookieStore = await cookies();
+      const wasRemembered = cookieStore.get("rememberMe")?.value === "true";
+
+      await setAuthTokens(
+        accessToken,
+        newRefreshToken,
+        expiresAt,
+        wasRemembered,
+      );
+      return accessToken;
+    }
     return null;
   } catch (error) {
     console.error("Token refresh failed:", error);
