@@ -50,10 +50,10 @@ const AddNewEpic = ({ members, projectId }: AddEpicProp) => {
   const onSubmit: SubmitHandler<AddEpicFormData> = async (data) => {
     const payload = {
       title: data.title,
-      description: data.description ?? "",
-      assignee_id: data.assignee_id ?? "",
+      description: data.description ?? null,
+      assignee_id: data.assignee_id ?? null,
       project_id,
-      deadline: data.deadline ?? "",
+      deadline: data.deadline ?? null,
     };
     setIsLoading(true);
     try {
