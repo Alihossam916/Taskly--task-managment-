@@ -11,6 +11,7 @@ import Badge from "@/src/components/ui/badge";
 import { getProjectById } from "@/src/lib/api/projects/getProjectById";
 import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
 import EditIcon from "@/src/components/icons/editIcon";
+import { getInitials } from "@/src/lib/utils/initials";
 
 interface Props {
   params: Promise<{ projectId: string }>;
@@ -65,13 +66,9 @@ const ProjectMembersPage = async ({ params }: Props) => {
               </thead>
               <tbody className="bg-white">
                 {members?.map((member) => {
-                  const initials = (member.metadata.name || "Unknown Member")
-                    .split(" ")
-                    .map((n: string) => n[0])
-                    .join("")
-                    .toUpperCase()
-                    .slice(0, 2);
-
+                  const initials = getInitials(
+                    member.metadata.name || "Unknown Member",
+                  );
                   return (
                     <tr
                       key={member.member_id}
