@@ -7,9 +7,9 @@ export const addEpicSchema = z
     description: z
       .string()
       .max(500, "Description must be at most 500 characters")
-      .optional(),
-    assignee_id: z.string().optional(),
-    deadline: z.string().optional(),
+      .nullable(),
+    assignee_id: z.string().nullable(),
+    deadline: z.string().nullable(),
   })
   .superRefine((data, ctx) => {
     if (data.deadline) {
