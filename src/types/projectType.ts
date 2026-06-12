@@ -17,7 +17,26 @@ export interface MemberMetadata {
 
 export interface Member {
   member_id: string;
+  user_id: string;
   email: string;
   role: string;
   metadata: MemberMetadata;
+}
+
+export interface UserRef {
+  sub: string;
+  name: string;
+  email: string;
+  department: string;
+}
+
+export interface Epic {
+  id: string;
+  epic_id: string;
+  title: string;
+  description?: string;
+  deadline?: string;
+  created_at: string;
+  created_by: UserRef;
+  assignee?: UserRef;
 }
