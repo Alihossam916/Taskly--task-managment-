@@ -3,14 +3,20 @@ import Link from "next/link";
 
 // components
 import Button from "../../ui/button";
+import Input from "../../ui/input";
 
 // types
 import { Epic, Project } from "@/src/types/projectType";
-import Input from "../../ui/input";
+
+// icons
 import SearchIcon from "../../icons/searchIcon";
 import EditIcon from "../../icons/editIcon";
 import CreatedByIcon from "../../icons/createdByIcon";
 import DateIcon from "../../icons/dateIcon";
+
+// lib
+import { formatDate } from "@/src/lib/utils/formatDate";
+import { getInitials } from "@/src/lib/utils/initials";
 
 const ProjectEpicsList = ({
   project,
@@ -63,13 +69,7 @@ const ProjectEpicsList = ({
       {epics && (
         <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
           {epics.map((epic) => {
-            const initials = (epic.assignee?.name || "Unknown Member")
-              .split(" ")
-              .map((n: string) => n[0])
-              .join("")
-              .toUpperCase()
-              .slice(0, 2);
-
+            const initials = getInitials(epic.assignee?.name || "U N");
             return (
               <div
                 key={epic.epic_id}
@@ -88,7 +88,9 @@ const ProjectEpicsList = ({
                       {initials}
                     </div>
                     <div className="flex flex-col-reverse sm:flex-col">
-                      <p className="text-slate-2 body-md">Assignee</p>
+                      <p className="text-slate-2 body-md">
+                        {epic.assignee?.name ? "Assignee" : "unassigned"}
+                      </p>
                       <h5 className="text-slate-3 title-md">
                         {epic.assignee?.name}
                       </h5>
@@ -96,7 +98,9 @@ const ProjectEpicsList = ({
                   </div>
                   <div className="sm:hidden">
                     <p className="text-slate-2 uppercase label-sm">deadline</p>
-                    <p className="text-slate-3 body-md">{epic.deadline}</p>
+                    <p className="text-slate-3 body-md">
+                      {formatDate(epic.deadline)}
+                    </p>
                   </div>
                 </section>
                 <section className="hidden sm:flex justify-between items-center border-t border-surface-low pt-2">
@@ -105,13 +109,13 @@ const ProjectEpicsList = ({
                     <p className="text-slate-2 label-sm">
                       Created by:{" "}
                       <span className="text-slate-3">
-                        {epic.assignee?.name}
+                        {epic.created_by?.name}
                       </span>
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
                     <DateIcon />
-                    <p>{epic.deadline}</p>
+                    <p>{formatDate(epic.created_at)}</p>
                   </div>
                 </section>
               </div>
