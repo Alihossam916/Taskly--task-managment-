@@ -3,8 +3,10 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
+// lib
 import { logoutApi } from "@/src/lib/api/auth/logout";
 import { getAccessToken } from "@/src/lib/utils/cookies";
+import { getInitials } from "@/src/lib/utils/initials";
 
 interface AvatarDropdownProps {
   user?: { name: string } | null;
@@ -16,12 +18,7 @@ export default function AvatarDropdown({ user }: AvatarDropdownProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const name = user?.name ?? "john doe";
-  const initials = name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
+  const initials = getInitials(name);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
