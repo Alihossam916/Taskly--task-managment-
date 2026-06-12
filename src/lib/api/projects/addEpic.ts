@@ -23,15 +23,16 @@ export async function addEpicApi(
       },
       body: JSON.stringify({
         title,
-        description,
-        assignee_id,
+        description: description,
+        assignee_id: assignee_id || null,
         project_id,
-        deadline,
+        deadline: deadline || null,
       }),
     });
     if (response.ok) {
-      const project = await response.json();
-      return project;
+      const epic = await response.json();
+      console.log(epic);
+      return epic;
     }
   } catch (error) {
     return {
