@@ -26,7 +26,7 @@ async function ProjectEditPage({ params }: Props) {
         </Link>
         <span className="text-slate-1">{">"}</span>
         <Link
-          href={`/project/${projectId}/epics`}
+          href={`/project/${projectId}/edit`}
           className="uppercase label-sm text-slate-2"
         >
           {project?.name}
