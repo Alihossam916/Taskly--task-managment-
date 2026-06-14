@@ -1,5 +1,6 @@
-import Link from "next/link";
+// components
 import AddNewEpic from "@/src/components/common/projects/addNewEpic";
+import BreadCrumb from "@/src/components/ui/breadCrumb";
 
 // lib
 import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
@@ -16,27 +17,14 @@ const AddEpicPage = async ({ params }: Props) => {
 
   return (
     <div className="md:px-20 mb-30 mt-5">
-      <div className="flex items-center gap-2">
-        <Link href={"/project"} className="uppercase label-sm text-slate-2">
-          Projects
-        </Link>
-        <span className="text-slate-1">{">"}</span>
-        <Link
-          href={`/project/${projectId}/edit`}
-          className="uppercase label-sm text-slate-2"
-        >
-          {project?.name}
-        </Link>
-        <span className="text-slate-1">{">"}</span>
-        <Link
-          href={`/project/${projectId}/epics`}
-          className="uppercase label-sm text-slate-2"
-        >
-          epics
-        </Link>
-        <span className="text-slate-1">{">"}</span>
-        <p className="uppercase label-sm text-primary">New Epic</p>
-      </div>
+      <BreadCrumb
+        items={[
+          { label: "projects", href: "/project" },
+          { label: project?.name, href: `/project/${projectId}/edit` },
+          { label: "epics", href: `/project/${projectId}/epics` },
+          { label: "new epic" },
+        ]}
+      />
       <div className="mt-5">
         <h1 className="headline-lg text-slate-3">Create New Epic</h1>
         <p className="text-slate-2 hidden sm:block">

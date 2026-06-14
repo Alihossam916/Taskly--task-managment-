@@ -1,11 +1,10 @@
-import Link from "next/link";
-
 // icons
 import AddMemberIcon from "@/src/components/icons/addMemberIcon";
 
 // components
 import Button from "@/src/components/ui/button";
 import Badge from "@/src/components/ui/badge";
+import BreadCrumb from "@/src/components/ui/breadCrumb";
 
 // lib
 import { getProjectById } from "@/src/lib/api/projects/getProjectById";
@@ -24,20 +23,13 @@ const ProjectMembersPage = async ({ params }: Props) => {
 
   return (
     <div className="mb-30 mt-5">
-      <div className="hidden sm:flex items-center gap-2">
-        <Link href={"/project"} className="uppercase label-sm text-slate-2">
-          Projects
-        </Link>
-        <span className="text-slate-1">{">"}</span>
-        <Link
-          href={`/project/${projectId}/edit`}
-          className="uppercase label-sm text-slate-2"
-        >
-          {project?.name}
-        </Link>
-        <span className="text-slate-1">{">"}</span>
-        <p className="uppercase label-sm text-primary">members</p>
-      </div>
+      <BreadCrumb
+        items={[
+          { label: "projects", href: "/project" },
+          { label: project?.name, href: `/project/${projectId}/edit` },
+          { label: "members" },
+        ]}
+      />
       <div className="flex items-center justify-center sm:justify-between">
         <h1 className="headline-lg text-slate-3">Project Members</h1>
         <Button className="hidden sm:flex w-fit items-center gap-2 rounded-xs!">

@@ -1,11 +1,10 @@
-import Link from "next/link";
-
 // icons
 import AddMemberIcon from "@/src/components/icons/addMemberIcon";
 
 // components
 import Button from "@/src/components/ui/button";
 import EditProjectForm from "@/src/components/common/projects/editProjectForm";
+import BreadCrumb from "@/src/components/ui/breadCrumb";
 
 // lib
 import { getProjectById } from "@/src/lib/api/projects/getProjectById";
@@ -20,20 +19,13 @@ async function ProjectEditPage({ params }: Props) {
 
   return (
     <div className="mb-30 mt-5">
-      <div className="flex items-center gap-2">
-        <Link href={"/project"} className="uppercase label-sm text-slate-2">
-          Projects
-        </Link>
-        <span className="text-slate-1">{">"}</span>
-        <Link
-          href={`/project/${projectId}/edit`}
-          className="uppercase label-sm text-slate-2"
-        >
-          {project?.name}
-        </Link>
-        <span className="text-slate-1">{">"}</span>
-        <p className="uppercase label-sm text-primary">edit</p>
-      </div>
+      <BreadCrumb
+        items={[
+          { label: "projects", href: "/project" },
+          { label: project?.name, href: `/project/${projectId}/edit` },
+          { label: "edit" },
+        ]}
+      />
       <div className="hidden sm:flex items-center justify-between">
         <h1 className="headline-lg text-slate-3">Edit Project</h1>
         <Button className="w-fit flex items-center gap-2 rounded-xs!">

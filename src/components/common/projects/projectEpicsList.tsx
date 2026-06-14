@@ -4,6 +4,7 @@ import Link from "next/link";
 // components
 import Button from "../../ui/button";
 import Input from "../../ui/input";
+import BreadCrumb from "../../ui/breadCrumb";
 
 // types
 import { Epic, Project } from "@/src/types/projectType";
@@ -29,20 +30,13 @@ const ProjectEpicsList = ({
 }) => {
   return (
     <div className="mb-30 mt-5">
-      <div className="hidden sm:flex items-center gap-2">
-        <Link href={"/project"} className="uppercase label-sm text-slate-2">
-          Projects
-        </Link>
-        <span className="text-slate-1">{">"}</span>
-        <Link
-          href={`/project/${projectId}/edit`}
-          className="uppercase label-sm text-slate-2"
-        >
-          {project?.name}
-        </Link>
-        <span className="text-slate-1">{">"}</span>
-        <p className="uppercase label-sm text-primary">epics</p>
-      </div>
+      <BreadCrumb
+        items={[
+          { label: "projects", href: "/project" },
+          { label: project?.name, href: `/project/${projectId}/edit` },
+          { label: "epics" },
+        ]}
+      />
       <div className="flex items-center justify-center sm:justify-between">
         <h1 className="hidden sm:block headline-lg text-slate-3">
           Project Epics
