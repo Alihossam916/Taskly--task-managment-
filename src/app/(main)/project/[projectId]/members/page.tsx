@@ -109,12 +109,9 @@ const ProjectMembersPage = async ({ params }: Props) => {
           {/* Mobile cards */}
           <div className="sm:hidden space-y-4 mt-6">
             {members?.map((member) => {
-              const initials = (member.metadata.name || "Unknown Member")
-                .split(" ")
-                .map((n: string) => n[0])
-                .join("")
-                .toUpperCase()
-                .slice(0, 2);
+              const initials = getInitials(
+                member.metadata.name || "Unknown Member",
+              );
 
               return (
                 <div
