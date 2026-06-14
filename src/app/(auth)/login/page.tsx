@@ -3,7 +3,7 @@ import LoginForm from "@/src/components/common/auth/LoginForm";
 
 const Login = () => {
   return (
-    <div className="flex flex-col items-center gap-4 pt-12 pb-0 sm:py-12 px-6 sm:px-12 rounded-sm sm:bg-white max-w-xl mx-auto mb-12 sm:shadow-lg">
+    <div className="flex flex-col items-center gap-4 pt-12 pb-0 sm:py-12 px-6 sm:px-12 rounded-sm sm:bg-white max-w-xl mx-auto my-12 sm:shadow-lg">
       <h1 className="headline-lg text-center">Welcome Back</h1>
       <p className="body-md text-slate-2 text-center">
         Please enter your details to access your workspace
