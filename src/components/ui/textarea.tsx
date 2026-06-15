@@ -9,7 +9,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProp>(
     const styles = "h-37.5 p-4 rounded-sm transition-all outline-none";
     const variants = {
       primary:
-        "bg-[#D7E2FF] text-[#6B7280] focus:ring-2 focus:ring-primary-container",
+        "bg-[#D7E2FF] text-black focus:ring-2 focus:ring-primary-container",
       error: "bg-[#FFDAD6] text-[#93000A] focus:ring-2 focus:ring-error",
     };
 
