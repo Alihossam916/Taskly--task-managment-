@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useState, useId } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { toast } from "react-toastify";
 import Select from "react-select";
@@ -34,7 +35,9 @@ interface AddEpicProp {
 }
 
 const AddNewEpic = ({ members, projectId }: AddEpicProp) => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const selectInstanceId = useId();
   const project_id = projectId;
 
   const {
@@ -67,6 +70,7 @@ const AddNewEpic = ({ members, projectId }: AddEpicProp) => {
       await addEpicApi(payload, project_id);
       toast.success("Epic created successfully!");
       reset();
+      router.push(`/project/${projectId}/epics`);
     } catch {
       toast.error(`Failed to create epic: ${errors}`);
     } finally {
@@ -152,6 +156,7 @@ const AddNewEpic = ({ members, projectId }: AddEpicProp) => {
                   render={({ field }) => (
                     <Select
                       inputId="assignee"
+                      instanceId={selectInstanceId}
                       options={memberOptions}
                       placeholder="Select a member..."
                       value={
