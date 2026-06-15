@@ -118,7 +118,6 @@ const ForgotPasswordFrom = () => {
                 id="email"
                 type="text"
                 placeholder="yourname@company.com"
-                required
                 variant={errors.email ? "error" : "primary"}
                 className="rounded-sm!"
               />

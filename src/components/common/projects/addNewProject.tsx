@@ -77,7 +77,6 @@ const AddNewProject = () => {
               id="name"
               type="text"
               placeholder="Enter project title"
-              required
               variant={errors.name ? "error" : "primary"}
             />
             {errors.name && (

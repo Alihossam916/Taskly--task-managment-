@@ -85,7 +85,6 @@ const AddNewEpic = ({ members, projectId }: AddEpicProp) => {
                 id="title"
                 type="text"
                 placeholder="Enter project title"
-                required
                 variant={errors.title ? "error" : "primary"}
               />
               {errors.title && (

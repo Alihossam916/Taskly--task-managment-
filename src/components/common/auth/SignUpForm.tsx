@@ -87,7 +87,6 @@ const SignUpForm = () => {
           id="name"
           type="text"
           placeholder="Enter your full name"
-          required
           variant={errors.name ? "error" : "primary"}
         />
         {errors.name && (
@@ -104,7 +103,6 @@ const SignUpForm = () => {
           id="email"
           type="text"
           placeholder="yourname@company.com"
-          required
           variant={errors.email ? "error" : "primary"}
         />
         {errors.email && (
@@ -139,7 +137,6 @@ const SignUpForm = () => {
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              required
               variant={errors.password ? "error" : "primary"}
             />
             <button
@@ -161,7 +158,6 @@ const SignUpForm = () => {
             id="confirm-password"
             type="password"
             placeholder="Repeat your password"
-            required
             variant={errors.confirmPassword ? "error" : "primary"}
           />
         </div>

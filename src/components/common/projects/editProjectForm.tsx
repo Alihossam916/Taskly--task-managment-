@@ -83,7 +83,6 @@ const EditProjectForm = ({ project }: ProjectEditProps) => {
               id="name"
               type="text"
               placeholder="Enter project title"
-              required
               defaultValue={project.name}
               variant={errors.name ? "error" : "primary"}
             />

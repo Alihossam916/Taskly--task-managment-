@@ -105,7 +105,6 @@ const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              required
               variant={errors.password ? "error" : "primary"}
               className="bg-surface-low"
             />
@@ -128,7 +127,6 @@ const ResetPasswordForm = ({ token }: ResetPasswordFormProps) => {
             id="confirm-password"
             type="password"
             placeholder="Repeat your password"
-            required
             variant={errors.confirmPassword ? "error" : "primary"}
             className="bg-surface-low"
           />
