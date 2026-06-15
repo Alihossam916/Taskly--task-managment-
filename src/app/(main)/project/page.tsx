@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Suspense } from "react";
 import dynamic from "next/dynamic";
 
 // lib
