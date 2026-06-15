@@ -94,7 +94,6 @@ const LoginForm = () => {
             id="email"
             type="text"
             placeholder="yourname@company.com"
-            required
             variant={errors.email ? "error" : "primary"}
             className="py-3"
           />
@@ -108,7 +107,7 @@ const LoginForm = () => {
         )}
       </div>
       {/* password field */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col gap-2">
         <div className="flex flex-col gap-2 w-full">
           <div className="flex items-center justify-between">
             <label htmlFor="password" className="uppercase label-sm">
@@ -127,7 +126,6 @@ const LoginForm = () => {
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
-              required
               variant={errors.password ? "error" : "primary"}
               className="py-3"
             />
@@ -145,6 +143,11 @@ const LoginForm = () => {
             </span>
           </div>
         </div>
+        {errors.password && (
+          <span className="text-red-600 text-sm">
+            {errors.password.message}
+          </span>
+        )}
       </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
