@@ -18,9 +18,10 @@ interface Props {
 
 const ProjectMembersPage = async ({ params }: Props) => {
   const { projectId } = await params;
-  const project = await getProjectById(projectId);
-  const members = await getProjectMembers(projectId);
-
+  const [project, members] = await Promise.all([
+    getProjectById(projectId),
+    getProjectMembers(projectId),
+  ]);
   return (
     <div className="mb-30 mt-5">
       <BreadCrumb
