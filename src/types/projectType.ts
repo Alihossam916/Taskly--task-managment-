@@ -10,6 +10,14 @@ export interface ProjectListProps {
   currentPage: number;
   limit: number;
 }
+export interface ProjectEpicsListProps {
+  project: Project | null;
+  projectId: string;
+  epics: Epic[];
+  total: number;
+  currentPage: number;
+  limit: number;
+}
 export interface MemberMetadata {
   name: string;
   email: string;
