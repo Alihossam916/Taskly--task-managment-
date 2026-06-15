@@ -7,23 +7,31 @@ const anonKey = process.env.SUPABASE_ANON_KEY!;
 
 export async function getProjectEpics(
   projectId: string,
-): Promise<Epic[] | null> {
+  limit: number,
+  offset: number,
+): Promise<{ epics: Epic[]; total: number } | null> {
   const token = await getAccessToken();
+
   try {
     const response = await fetch(
-      `${baseUrl}/rest/v1/project_epics?project_id=eq.${projectId}`,
+      `${baseUrl}/rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`,
       {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
           apikey: anonKey,
           "Content-Type": "application/json",
+          Prefer: "count=exact",
         },
       },
     );
-    if (!response.ok) return null;
-    const epics = await response.json();
-    return epics;
+    if (response.ok) {
+      const epics = await response.json();
+      const total =
+        Number(response.headers.get("content-range")?.split("/")[1]) || 0;
+      return { epics, total };
+    }
+    return null;
   } catch {
     return null;
   }
