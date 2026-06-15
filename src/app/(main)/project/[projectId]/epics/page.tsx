@@ -27,8 +27,10 @@ interface Props {
 
 export default async function ProjectEpicPage({ params }: Props) {
   const { projectId } = await params;
-  const project = await getProjectById(projectId);
-  const epics = await getProjectEpics(projectId);
+  const [project, epics] = await Promise.all([
+    getProjectById(projectId),
+    getProjectEpics(projectId),
+  ]);
 
   // ---------- Empty state ----------
   if (!epics || epics.length === 0) {
@@ -80,6 +82,6 @@ export default async function ProjectEpicPage({ params }: Props) {
   }
 
   return (
-      <ProjectEpicsList project={project} projectId={projectId} epics={epics} />
+    <ProjectEpicsList project={project} projectId={projectId} epics={epics} />
   );
 }
