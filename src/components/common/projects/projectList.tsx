@@ -1,7 +1,9 @@
 "use client";
-import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
+// lib
+import { getProjects } from "@/src/lib/api/projects/getProjects";
 
 // types
 import { Project, ProjectListProps } from "@/src/types/projectType";
@@ -13,13 +15,11 @@ import CircledPlus from "@/src/components/icons/circledPlus";
 
 // components
 import Button from "@/src/components/ui/button";
-import Spinner from "@/src/components/ui/spinner";
+import Pagination from "../../ui/pagination";
+import InfiniteScrollLoader from "../../ui/infiniteScrollLoader";
 
-// api
-import { getProjects } from "@/src/lib/api/projects/getProjects";
-
-// constants
-import { mobileView } from "@/src/constants/mobileView";
+// hooks
+import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
 
 const ProjectList = ({
   projects: initialProjects,
@@ -28,70 +28,21 @@ const ProjectList = ({
   limit,
 }: ProjectListProps) => {
   const router = useRouter();
-  const [displayedProjects, setDisplayedProjects] =
-    useState<Project[]>(initialProjects);
-  const [page, setPage] = useState(currentPage);
-  const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(initialProjects.length < total);
-
-  // Track previous props to adjust state during render
-  const [prevInitialProjects, setPrevInitialProjects] =
-    useState(initialProjects);
-
-  if (initialProjects !== prevInitialProjects) {
-    setPrevInitialProjects(initialProjects);
-    setDisplayedProjects(initialProjects);
-    setPage(currentPage);
-    setHasMore(initialProjects.length < total);
-  }
-
-  const observerTarget = useRef<HTMLDivElement>(null);
-
-  const loadMoreProjects = useCallback(async () => {
-    if (loading || !hasMore) return;
-
-    setLoading(true);
-    try {
-      const nextPage = page + 1;
-      const offset = (nextPage - 1) * limit;
-
-      const { projects: newProjects } = await getProjects(limit, offset);
-
-      if (newProjects.length > 0) {
-        setDisplayedProjects((prev) => [...prev, ...newProjects]);
-        setPage(nextPage);
-        setHasMore(displayedProjects.length + newProjects.length < total);
-      } else {
-        setHasMore(false);
-      }
-    } catch (error) {
-      console.error("Failed to load more projects:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, [loading, hasMore, page, limit, total, displayedProjects.length]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (
-          entries[0].isIntersecting &&
-          window.innerWidth < mobileView &&
-          hasMore &&
-          !loading
-        ) {
-          loadMoreProjects();
-        }
-      },
-      { threshold: 0.1 },
-    );
-
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
-
-    return () => observer.disconnect();
-  }, [loadMoreProjects, hasMore, loading]);
+  const {
+    items: displayedProjects,
+    loading,
+    hasMore,
+    loadMore: loadMoreProjects,
+  } = useInfiniteScroll(
+    initialProjects,
+    total,
+    currentPage,
+    limit,
+    async (l, o) => {
+      const res = await getProjects(l, o);
+      return { items: res.projects, total: res.total };
+    },
+  );
 
   return (
     <div className="mt-5 mb-20">
@@ -160,67 +111,21 @@ const ProjectList = ({
           </h3>
         </Link>
       </section>
-
-      {/* Infinite Scroll Loader */}
-      <div
-        ref={observerTarget}
-        className="flex justify-center py-8 sm:hidden h-20"
-      >
-        {loading && <Spinner className="size-8!" />}
-        {!hasMore && displayedProjects.length > 0 && (
-          <p className="text-slate-2 body-md italic">
-            No more projects to show
-          </p>
-        )}
-      </div>
-
-      <div className="hidden sm:flex items-center justify-between mt-40">
-        <p>
-          Showing{" "}
-          {limit > displayedProjects.length ? displayedProjects.length : limit}{" "}
-          of {total} active projects
-        </p>
-
-        {/* pagination */}
-        <div className="hidden sm:flex items-center justify-between gap-2">
-          <Link
-            href={`/project?page=${currentPage - 1}`}
-            className={`px-3 py-2 rounded-xs text-sm font-medium transition border border-slate-1 ${
-              currentPage <= 1
-                ? "pointer-events-none opacity-40"
-                : "bg-white hover:shadow-sm"
-            }`}
-          >
-            {"<"}
-          </Link>
-          {Array.from(
-            { length: Math.ceil(total / limit) },
-            (_, i) => i + 1,
-          ).map((pageNumber) => (
-            <Link
-              key={pageNumber}
-              href={`/project?page=${pageNumber}`}
-              className={`size-9 flex items-center justify-center rounded-xs border border-slate-1 text-sm font-medium transition ${
-                pageNumber === currentPage
-                  ? "bg-primary text-white"
-                  : "bg-white hover:shadow-sm"
-              }`}
-            >
-              {pageNumber}
-            </Link>
-          ))}
-          <Link
-            href={`/project?page=${currentPage + 1}`}
-            className={`px-3 py-2 rounded-xs text-sm font-medium transition border border-slate-1 ${
-              currentPage >= Math.ceil(total / limit)
-                ? "pointer-events-none opacity-40"
-                : "bg-white hover:shadow-sm"
-            }`}
-          >
-            {">"}
-          </Link>
-        </div>
-      </div>
+      {/* pagination and infinite scroll */}
+      <InfiniteScrollLoader
+        loading={loading}
+        hasMore={hasMore}
+        hasItems={displayedProjects.length > 0}
+        onLoadMore={loadMoreProjects}
+      />
+      <Pagination
+        basePath="/project"
+        currentPage={currentPage}
+        limit={limit}
+        total={total}
+        displayedCount={displayedProjects.length}
+        itemLabel="active projects"
+      />{" "}
       <Link
         href={"/project/add"}
         className="fixed sm:hidden p-4 bg-primary size-12 bottom-30 right-5 z-50 text-white text-2xl rounded-sm flex items-center justify-center"
