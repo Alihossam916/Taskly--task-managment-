@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 // types
 import { Project, ProjectListProps } from "@/src/types/projectType";
@@ -27,6 +27,7 @@ const ProjectList = ({
   currentPage,
   limit,
 }: ProjectListProps) => {
+  const router = useRouter();
   const [displayedProjects, setDisplayedProjects] =
     useState<Project[]>(initialProjects);
   const [page, setPage] = useState(currentPage);
@@ -118,7 +119,7 @@ const ProjectList = ({
           return (
             <div
               key={project.id}
-              onClick={() => redirect(`/project/${project.id}/epics`)}
+              onClick={() => router.push(`/project/${project.id}/epics`)}
               className="w-full h-52 flex flex-col justify-between bg-white p-4 rounded-sm mx-auto hover:shadow-md transition-all duration-200 cursor-pointer"
             >
               <div>
