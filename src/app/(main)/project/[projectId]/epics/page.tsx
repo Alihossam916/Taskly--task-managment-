@@ -23,15 +23,22 @@ const ProjectEpicsList = dynamic(
 
 interface Props {
   params: Promise<{ projectId: string }>;
+  searchParams: Promise<{ page?: string }>;
 }
 
-export default async function ProjectEpicPage({ params }: Props) {
+export default async function ProjectEpicPage({ params, searchParams }: Props) {
   const { projectId } = await params;
-  const [project, epics] = await Promise.all([
+
+  const currentPage = Number((await searchParams).page) || 1;
+  const limit = 6;
+  const offset = (currentPage - 1) * limit;
+
+  const [project, epicsData] = await Promise.all([
     getProjectById(projectId),
-    getProjectEpics(projectId),
+    getProjectEpics(projectId, limit, offset),
   ]);
 
+  const { epics, total } = epicsData || { epics: [], total: 0 };
   // ---------- Empty state ----------
   if (!epics || epics.length === 0) {
     return (
@@ -82,6 +89,13 @@ export default async function ProjectEpicPage({ params }: Props) {
   }
 
   return (
-    <ProjectEpicsList project={project} projectId={projectId} epics={epics} />
+    <ProjectEpicsList
+      project={project}
+      projectId={projectId}
+      epics={epics}
+      total={total}
+      currentPage={currentPage}
+      limit={limit}
+    />
   );
 }
