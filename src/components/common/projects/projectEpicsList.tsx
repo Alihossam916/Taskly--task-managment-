@@ -5,9 +5,12 @@ import Link from "next/link";
 import Button from "../../ui/button";
 import Input from "../../ui/input";
 import BreadCrumb from "../../ui/breadCrumb";
+import InfiniteScrollLoader from "../../ui/infiniteScrollLoader";
+import Pagination from "../../ui/pagination";
 
 // types
-import { Epic, Project } from "@/src/types/projectType";
+import { ProjectEpicsListProps } from "@/src/types/projectType";
+import { Epic } from "@/src/types/projectType";
 
 // icons
 import SearchIcon from "../../icons/searchIcon";
@@ -18,16 +21,36 @@ import DateIcon from "../../icons/dateIcon";
 // lib
 import { formatDate } from "@/src/lib/utils/formatDate";
 import { getInitials } from "@/src/lib/utils/initials";
+import { getProjectEpics } from "@/src/lib/api/projects/getProjectEpics";
+
+// hooks
+import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
 
 const ProjectEpicsList = ({
   project,
   projectId,
   epics,
-}: {
-  project: Project | null;
-  projectId: string;
-  epics: Epic[];
-}) => {
+  total,
+  currentPage,
+  limit,
+}: ProjectEpicsListProps) => {
+  const {
+    items: displayedEpics,
+    loading,
+    hasMore,
+    loadMore: loadMoreEpics,
+  } = useInfiniteScroll<Epic>(
+    epics,
+    total,
+    currentPage,
+    limit,
+    async (l, o) => {
+      const res = await getProjectEpics(projectId, l, o);
+      if (!res) return null;
+      return { items: res.epics, total: res.total };
+    },
+  );
+
   return (
     <div className="mb-30 mt-5">
       <BreadCrumb
@@ -60,9 +83,9 @@ const ProjectEpicsList = ({
           </Link>
         </div>
       </div>
-      {epics && (
+      {displayedEpics && (
         <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
-          {epics.map((epic) => {
+          {displayedEpics.map((epic) => {
             const initials = getInitials(epic.assignee?.name || "U N");
             return (
               <div
@@ -117,33 +140,21 @@ const ProjectEpicsList = ({
           })}
         </section>
       )}
-      <section className="hidden sm:flex justify-between items-center mt-30">
-        <p>
-          Showing {epics.length} of {epics.length} active projects
-        </p>
-
-        {/* pagination */}
-        <div className="hidden sm:flex items-center justify-between gap-2">
-          <Link
-            href={``}
-            className={`px-3 py-2 rounded-xs text-sm font-medium transition border border-slate-1`}
-          >
-            {"<"}
-          </Link>
-          <Link
-            href={``}
-            className={`size-9 flex items-center justify-center rounded-xs border border-slate-1 bg-primary text-white text-sm font-medium transition`}
-          >
-            1
-          </Link>
-          <Link
-            href={``}
-            className={`px-3 py-2 rounded-xs text-sm font-medium transition border border-slate-1`}
-          >
-            {">"}
-          </Link>
-        </div>
-      </section>
+      {/* pagination and infinite scroll */}
+      <InfiniteScrollLoader
+        loading={loading}
+        hasMore={hasMore}
+        hasItems={displayedEpics.length > 0}
+        onLoadMore={loadMoreEpics}
+      />
+      <Pagination
+        basePath={`/project/${projectId}/epics`}
+        currentPage={currentPage}
+        limit={limit}
+        total={total}
+        displayedCount={displayedEpics.length}
+        itemLabel="epics"
+      />{" "}
       <Link
         href={`/project/${projectId}/epics/new`}
         className="fixed sm:hidden p-4 bg-primary size-12 bottom-30 right-5 z-50 text-white text-2xl rounded-sm flex items-center justify-center"
