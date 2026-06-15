@@ -47,7 +47,7 @@ const ProjectEpicsList = ({
             <Input
               type="search"
               placeholder="Search Epics..."
-              className="rounded-xs! pl-10"
+              className="rounded-xs! pl-10 placeholder:text-[#6B7280] text-black"
             />
           </div>
           <Link
