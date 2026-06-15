@@ -146,6 +146,7 @@ const ProjectEpicsList = ({
         hasMore={hasMore}
         hasItems={displayedEpics.length > 0}
         onLoadMore={loadMoreEpics}
+        label={"epics"}
       />
       <Pagination
         basePath={`/project/${projectId}/epics`}

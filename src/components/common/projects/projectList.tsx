@@ -117,6 +117,7 @@ const ProjectList = ({
         hasMore={hasMore}
         hasItems={displayedProjects.length > 0}
         onLoadMore={loadMoreProjects}
+        label={"projects"}
       />
       <Pagination
         basePath="/project"
