@@ -18,19 +18,24 @@ import Spinner from "@/src/components/ui/spinner";
 // api
 import { getProjects } from "@/src/lib/api/projects/getProjects";
 
+// constants
+import { mobileView } from "@/src/constants/mobileView";
+
 const ProjectList = ({
   projects: initialProjects,
   total,
   currentPage,
   limit,
 }: ProjectListProps) => {
-  const [displayedProjects, setDisplayedProjects] = useState<Project[]>(initialProjects);
+  const [displayedProjects, setDisplayedProjects] =
+    useState<Project[]>(initialProjects);
   const [page, setPage] = useState(currentPage);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialProjects.length < total);
 
   // Track previous props to adjust state during render
-  const [prevInitialProjects, setPrevInitialProjects] = useState(initialProjects);
+  const [prevInitialProjects, setPrevInitialProjects] =
+    useState(initialProjects);
 
   if (initialProjects !== prevInitialProjects) {
     setPrevInitialProjects(initialProjects);
@@ -68,7 +73,12 @@ const ProjectList = ({
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && window.innerWidth < 640 && hasMore && !loading) {
+        if (
+          entries[0].isIntersecting &&
+          window.innerWidth < mobileView &&
+          hasMore &&
+          !loading
+        ) {
           loadMoreProjects();
         }
       },
@@ -157,14 +167,17 @@ const ProjectList = ({
       >
         {loading && <Spinner className="size-8!" />}
         {!hasMore && displayedProjects.length > 0 && (
-          <p className="text-slate-2 body-md italic">No more projects to show</p>
+          <p className="text-slate-2 body-md italic">
+            No more projects to show
+          </p>
         )}
       </div>
 
       <div className="hidden sm:flex items-center justify-between mt-40">
         <p>
-          Showing {limit > displayedProjects.length ? displayedProjects.length : limit} of {total}{" "}
-          active projects
+          Showing{" "}
+          {limit > displayedProjects.length ? displayedProjects.length : limit}{" "}
+          of {total} active projects
         </p>
 
         {/* pagination */}
@@ -218,4 +231,3 @@ const ProjectList = ({
 };
 
 export default ProjectList;
-
