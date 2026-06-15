@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import dynamic from "next/dynamic";
 
 // lib
 import { getProjectEpics } from "@/src/lib/api/projects/getProjectEpics";
@@ -14,8 +15,12 @@ import TrackVelocityIcon from "@/src/components/icons/trackVelocity";
 
 // components
 import Button from "@/src/components/ui/button";
-import ProjectEpicsList from "@/src/components/common/projects/projectEpicsList";
 import EpicsSkeleton from "@/src/components/common/projects/epicsSkeleton";
+
+const ProjectEpicsList = dynamic(
+  () => import("@/src/components/common/projects/projectEpicsList"),
+  { loading: () => <EpicsSkeleton /> },
+);
 
 interface Props {
   params: Promise<{ projectId: string }>;
@@ -76,8 +81,6 @@ export default async function ProjectEpicPage({ params }: Props) {
   }
 
   return (
-    <Suspense fallback={<EpicsSkeleton />}>
       <ProjectEpicsList project={project} projectId={projectId} epics={epics} />
-    </Suspense>
   );
 }
