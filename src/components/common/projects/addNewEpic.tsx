@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 
 import { toast } from "react-toastify";
+import Select from "react-select";
 
 // components
 import Input from "../../ui/input";
@@ -14,7 +15,7 @@ import Spinner from "../../ui/spinner";
 import { addEpicApi } from "@/src/lib/api/projects/addEpic";
 
 // validation libraries
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 // schemas
@@ -40,11 +41,17 @@ const AddNewEpic = ({ members, projectId }: AddEpicProp) => {
     register,
     handleSubmit,
     watch,
+    control,
     formState: { errors },
     reset,
   } = useForm<AddEpicFormData>({ resolver: zodResolver(addEpicSchema) });
 
   const description = watch("description");
+
+  const memberOptions = members.map((member) => ({
+    value: member.user_id,
+    label: member.metadata.name,
+  }));
 
   // form submition logic
   const onSubmit: SubmitHandler<AddEpicFormData> = async (data) => {
@@ -139,23 +146,49 @@ const AddNewEpic = ({ members, projectId }: AddEpicProp) => {
                 assignee
               </label>
               <div className="w-full space-y-2">
-                <select
-                  {...register("assignee_id")}
-                  id="assignee"
-                  defaultValue={""}
-                  className="w-full px-4 py-4 sm:py-3 font-medium rounded-xl sm:rounded-sm transition-all outline-none bg-[#D7E2FF] text-[#6B7280] focus:ring-2 focus:ring-primary-container cursor-pointer invalid:text-gray-400"
-                >
-                  <option value="" disabled hidden>
-                    Select a member...
-                  </option>
-                  {members.map((member, index) => {
-                    return (
-                      <option key={index} value={member.user_id}>
-                        {member.metadata.name}
-                      </option>
-                    );
-                  })}
-                </select>
+                <Controller
+                  name="assignee_id"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      inputId="assignee"
+                      options={memberOptions}
+                      placeholder="Select a member..."
+                      value={
+                        memberOptions.find(
+                          (opt) => opt.value === field.value,
+                        ) ?? null
+                      }
+                      onChange={(option) =>
+                        field.onChange(option ? option.value : "")
+                      }
+                      isClearable
+                      classNamePrefix="react-select"
+                      styles={{
+                        control: (base, state) => ({
+                          ...base,
+                          backgroundColor: "#D7E2FF",
+                          borderRadius: "0.75rem",
+                          border: "none",
+                          padding: "0.25rem",
+                          boxShadow: state.isFocused
+                            ? "0 0 0 2px var(--color-primary-container)"
+                            : "none",
+                          cursor: "pointer",
+                        }),
+                        placeholder: (base) => ({
+                          ...base,
+                          color: "#6B7280",
+                        }),
+                        singleValue: (base) => ({
+                          ...base,
+                          color: "black",
+                          fontWeight: 500,
+                        }),
+                      }}
+                    />
+                  )}
+                />{" "}
                 {errors.assignee_id && (
                   <div className="flex items-center gap-2">
                     <ValidationErrorIcon />
@@ -179,6 +212,7 @@ const AddNewEpic = ({ members, projectId }: AddEpicProp) => {
                   id="deadline"
                   type="date"
                   placeholder="Enter project title"
+                  onClick={(e) => e.currentTarget.showPicker()}
                   variant={errors.deadline ? "error" : "primary"}
                 />
                 {errors.deadline && (
