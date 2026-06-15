@@ -7,6 +7,7 @@ interface InfiniteScrollLoaderProps {
   loading: boolean;
   hasMore: boolean;
   hasItems: boolean;
+  label: string;
   onLoadMore: () => void;
 }
 
@@ -14,6 +15,7 @@ const InfiniteScrollLoader = ({
   loading,
   hasMore,
   hasItems,
+  label,
   onLoadMore,
 }: InfiniteScrollLoaderProps) => {
   const observerTarget = useRef<HTMLDivElement>(null);
@@ -41,10 +43,13 @@ const InfiniteScrollLoader = ({
   }, [onLoadMore, hasMore, loading]);
 
   return (
-    <div ref={observerTarget} className="flex justify-center py-8 sm:hidden h-20">
+    <div
+      ref={observerTarget}
+      className="flex justify-center py-8 sm:hidden h-20"
+    >
       {loading && <Spinner className="size-8!" />}
       {!hasMore && hasItems && (
-        <p className="text-slate-2 body-md italic">No more projects to show</p>
+        <p className="text-slate-2 body-md italic">No more {label} to show</p>
       )}
     </div>
   );
