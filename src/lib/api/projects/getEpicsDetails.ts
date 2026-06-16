@@ -30,10 +30,10 @@ export async function getEpicsDetails(
       const epic = await response.json();
       return { epic };
     }
-    throw new Error("Failed to fetch projects");
+    throw new Error("Failed to fetch epic details");
   } catch (error) {
     throw new Error(
-      error instanceof Error ? error.message : "Failed to fetch projects",
+      error instanceof Error ? error.message : "Failed to fetch epic details",
     );
   }
 }
