@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useState } from "react";
 
 // components
 import Button from "../../ui/button";
@@ -7,6 +8,7 @@ import Input from "../../ui/input";
 import BreadCrumb from "../../ui/breadCrumb";
 import InfiniteScrollLoader from "../../ui/infiniteScrollLoader";
 import Pagination from "../../ui/pagination";
+import EpicDetailsModal from "./epicDetailsModal";
 
 // types
 import { ProjectEpicsListProps } from "@/src/types/projectType";
@@ -34,6 +36,8 @@ const ProjectEpicsList = ({
   currentPage,
   limit,
 }: ProjectEpicsListProps) => {
+  const [selectedEpic, setSelectedEpic] = useState<Epic | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     items: displayedEpics,
     loading,
@@ -50,6 +54,11 @@ const ProjectEpicsList = ({
       return { items: res.epics, total: res.total };
     },
   );
+
+  const handleEpicClick = (epic: Epic) => {
+    setSelectedEpic(epic);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="mb-30 mt-5">
@@ -90,7 +99,8 @@ const ProjectEpicsList = ({
             return (
               <div
                 key={epic.epic_id}
-                className="bg-white sm:border-l-4 border-[#005235] rounded-xs p-4 space-y-4"
+                onClick={() => handleEpicClick(epic)}
+                className="bg-white sm:border-l-4 border-[#005235] rounded-xs p-4 space-y-4 cursor-pointer"
               >
                 <section className="flex items-center justify-between">
                   <h6 className="label-sm px-4 py-2 bg-success">
@@ -140,6 +150,13 @@ const ProjectEpicsList = ({
           })}
         </section>
       )}
+      {/* 5. Render the Modal */}
+      {isModalOpen && selectedEpic && (
+        <EpicDetailsModal
+          epic={selectedEpic}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
       {/* pagination and infinite scroll */}
       <InfiniteScrollLoader
         loading={loading}
@@ -158,7 +175,7 @@ const ProjectEpicsList = ({
       />{" "}
       <Link
         href={`/project/${projectId}/epics/new`}
-        className="fixed sm:hidden p-4 bg-primary size-12 bottom-30 right-5 z-50 text-white text-2xl rounded-sm flex items-center justify-center"
+        className="fixed sm:hidden p-4 bg-primary size-12 bottom-30 right-5 z-40 text-white text-2xl rounded-sm flex items-center justify-center"
       >
         +
       </Link>
