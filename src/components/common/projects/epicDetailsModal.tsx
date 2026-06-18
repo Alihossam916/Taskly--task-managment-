@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { toast } from "react-toastify";
 
@@ -261,16 +262,24 @@ const EpicDetailsModal = ({
             <section className="space-y-4">
               <div className="flex justify-between items-center">
                 <h4 className="capitalize title-md">tasks</h4>
-                <Button variant="secondary" className="capitalize">
-                  + add tasks
-                </Button>
+                <Link
+                  href={`/project/${projectId}/tasks/new?epic_id=${epic?.id}&epic_title=${epic?.title}`}
+                >
+                  <Button variant="secondary" className="capitalize">
+                    + add tasks
+                  </Button>
+                </Link>
               </div>
               <div className="bg-surface-low flex flex-col items-center gap-6 rounded-lg p-10">
                 <EmptyTasksIcon className="text-primary sm:text-slate-1 bg-surface-highest rounded-xl p-3 size-11" />
                 <p className="title-md text-center">
                   No tasks have been added to this epic yet
                 </p>
-                <Button className="capitalize">+ add tasks</Button>
+                <Link
+                  href={`/project/${projectId}/tasks/new?epic_id=${epic?.id}&epic_title=${epic?.title}`}
+                >
+                  <Button className="capitalize">+ add tasks</Button>
+                </Link>
               </div>
             </section>
           </div>
