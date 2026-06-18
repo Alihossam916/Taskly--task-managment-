@@ -12,8 +12,10 @@ interface Props {
 
 const AddEpicPage = async ({ params }: Props) => {
   const { projectId } = await params;
-  const members = await getProjectMembers(projectId);
-  const project = await getProjectById(projectId);
+  const [members, project] = await Promise.all([
+    getProjectMembers(projectId),
+    getProjectById(projectId),
+  ]);
 
   return (
     <div className="md:px-20 mb-30 mt-5">
