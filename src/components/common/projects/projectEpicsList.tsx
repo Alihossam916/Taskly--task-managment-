@@ -153,7 +153,9 @@ const ProjectEpicsList = ({
       {/* 5. Render the Modal */}
       {isModalOpen && selectedEpic && (
         <EpicDetailsModal
-          epic={selectedEpic}
+          // to keep the epics updated after editing in tha modal
+          epicId={selectedEpic.id}
+          projectId={projectId}
           onClose={() => setIsModalOpen(false)}
         />
       )}

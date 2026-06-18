@@ -1,7 +1,7 @@
 import React, { forwardRef, InputHTMLAttributes } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  variant?: "primary" | "error";
+  variant?: "primary" | "error" | "secondary";
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -11,6 +11,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const variants = {
       primary:
         "bg-[#D7E2FF] text-black focus:ring-2 focus:ring-primary-container",
+      secondary: "bg-none text-slate-3 focus:border-b border-slate-2",
       error: "bg-[#FFDAD6] text-[#93000A] focus:ring-2 focus:ring-error",
     };
 

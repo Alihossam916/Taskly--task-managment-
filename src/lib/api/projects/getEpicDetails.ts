@@ -8,11 +8,15 @@ import { Epic } from "@/src/types/projectType";
 const baseUrl = process.env.SUPABASE_URL!;
 const anonKey = process.env.SUPABASE_ANON_KEY!;
 
-export async function getEpicsDetails(
+export async function getEpicDetails(
   projectId: string,
   epicId: string,
-): Promise<{ epic: Epic }> {
+): Promise<Epic[]> {
   const token: string | null = await getAccessToken();
+
+  if (!token) {
+    throw new Error("unauthorized");
+  }
 
   try {
     const response = await fetch(
@@ -22,18 +26,17 @@ export async function getEpicsDetails(
         headers: {
           Authorization: `Bearer ${token}`,
           apikey: anonKey,
-          "Content-Type": "application/json",
         },
       },
     );
     if (response.ok) {
       const epic = await response.json();
-      return { epic };
+      return epic;
     }
-    throw new Error("Failed to fetch projects");
+    throw new Error("Failed to fetch epic details");
   } catch (error) {
     throw new Error(
-      error instanceof Error ? error.message : "Failed to fetch projects",
+      error instanceof Error ? error.message : "Failed to fetch epic details",
     );
   }
 }
