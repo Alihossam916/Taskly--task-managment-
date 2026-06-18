@@ -22,6 +22,10 @@ export async function editEpicApi({
   deadline,
 }: EditEpicApiProp) {
   const token: string | null = await getAccessToken();
+  
+  if (!token) {
+    throw new Error("unauthorized");
+  }
 
   try {
     const response = await fetch(`${baseUrl}/rest/v1/epics?id=eq.${epicId}`, {
