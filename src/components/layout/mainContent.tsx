@@ -3,6 +3,8 @@ import { ReactNode, useState, useEffect } from "react";
 
 import { useSelector } from "react-redux";
 
+import { mobileView } from "@/src/constants/mobileView";
+
 export default function MainContent({ children }: { children: ReactNode }) {
   const [screenWidth, setScreenWidth] = useState(0);
   const extended = useSelector((state: any) => state.sidebar.extended);
@@ -16,8 +18,8 @@ export default function MainContent({ children }: { children: ReactNode }) {
 
   return (
     <div
-      className={`overflow-hidden xs:overflow-visible transition-all duration-300 p-4 w-full bg-background ${
-        screenWidth < 640
+      className={`transition-all duration-300 p-4 w-full bg-background ${
+        screenWidth < mobileView
           ? "ml-0" // No margin on mobile
           : extended
             ? "ml-64"
