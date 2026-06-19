@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 
 import { toast } from "react-toastify";
 
@@ -26,6 +27,7 @@ import EpicTitleInput from "./updateEpic/epicTitleInput";
 import EpicDescription from "./updateEpic/epicDescription";
 import EpicAssigneeSelect from "./updateEpic/epicAssigneeSelect";
 import TaskList from "./taskList";
+import Spinner from "../../ui/spinner";
 
 // icons
 import EpicIdIcon from "../../icons/epicIdIcon";
@@ -38,6 +40,10 @@ interface EpicDetailsModalProps {
   projectId: string;
   onClose: () => void;
 }
+
+const DynamicTaskList = dynamic(() => import("./taskList"), {
+  loading: () => <Spinner className="border-slate-3" />,
+});
 
 const EpicDetailsModal = ({
   epicId,
@@ -257,7 +263,7 @@ const EpicDetailsModal = ({
             </section>
 
             {/* tasks section */}
-            <TaskList projectId={projectId} epic={epic}/>
+            <DynamicTaskList projectId={projectId} epic={epic} />
           </div>
         </form>
       </FormProvider>
