@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 import { toast } from "react-toastify";
 
@@ -23,16 +22,15 @@ import { editEpicApi } from "@/src/lib/api/projects/editEpic";
 import { getEpicDetails } from "@/src/lib/api/projects/getEpicDetails";
 
 // components
-import Button from "../../ui/button";
 import EpicTitleInput from "./updateEpic/epicTitleInput";
 import EpicDescription from "./updateEpic/epicDescription";
 import EpicAssigneeSelect from "./updateEpic/epicAssigneeSelect";
+import TaskList from "./taskList";
 
 // icons
 import EpicIdIcon from "../../icons/epicIdIcon";
 import DateIcon from "../../icons/dateIcon";
 import UnassignedIcon from "../../icons/unassignedIcon";
-import EmptyTasksIcon from "../../icons/emptyTasksIcon";
 import EpicDeadlineInput from "./updateEpic/epicDeadlineInput";
 
 interface EpicDetailsModalProps {
@@ -259,29 +257,7 @@ const EpicDetailsModal = ({
             </section>
 
             {/* tasks section */}
-            <section className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h4 className="capitalize title-md">tasks</h4>
-                <Link
-                  href={`/project/${projectId}/tasks/new?epic_id=${epic?.id}&epic_title=${epic?.title}`}
-                >
-                  <Button variant="secondary" className="capitalize">
-                    + add tasks
-                  </Button>
-                </Link>
-              </div>
-              <div className="bg-surface-low flex flex-col items-center gap-6 rounded-lg p-10">
-                <EmptyTasksIcon className="text-primary sm:text-slate-1 bg-surface-highest rounded-xl p-3 size-11" />
-                <p className="title-md text-center">
-                  No tasks have been added to this epic yet
-                </p>
-                <Link
-                  href={`/project/${projectId}/tasks/new?epic_id=${epic?.id}&epic_title=${epic?.title}`}
-                >
-                  <Button className="capitalize">+ add tasks</Button>
-                </Link>
-              </div>
-            </section>
+            <TaskList projectId={projectId} epic={epic}/>
           </div>
         </form>
       </FormProvider>
