@@ -34,6 +34,7 @@ const AddNewTask = ({ projectId }: { projectId: string }) => {
 
   const epic_id = searchParams.get("epic_id");
   const epic_title = searchParams.get("epic_title");
+  const taskStatus = searchParams.get("state");
 
   const methods = useForm<AddTaskFormData>({
     resolver: zodResolver(addTaskSchema),
