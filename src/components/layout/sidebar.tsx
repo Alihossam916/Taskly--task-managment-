@@ -51,7 +51,7 @@ const Sidebar = () => {
         {
           name: "Tasks",
           icon: TasksIcon,
-          href: `/project/${projectId}/tasks`,
+          href: `/project/${projectId}/tasks?view=board`,
           desktopName: "Project Tasks",
         },
         {
