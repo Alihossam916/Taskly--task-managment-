@@ -48,3 +48,17 @@ export interface Epic {
   created_by: UserRef;
   assignee?: UserRef;
 }
+
+export interface Task {
+  id: string;
+  task_id: string;
+  epic_id?: string;
+  project_id: string;
+  title: string;
+  description?: string;
+  due_date?: string;
+  created_at: string;
+  created_by: string;
+  assignee?: { id: string };
+  status: string;
+}
