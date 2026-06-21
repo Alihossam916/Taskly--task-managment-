@@ -9,7 +9,6 @@ import Button from "../../ui/button";
 
 // icons
 import EmptyTasksIcon from "../../icons/emptyTasksIcon";
-import CircleUnChecked from "../../icons/circleUnChecked";
 import EditIcon from "../../icons/editIcon";
 import DateIcon from "../../icons/dateIcon";
 
@@ -82,7 +81,6 @@ const TaskList = ({ projectId, epic }: TaskListProp) => {
                 className="flex items-center justify-between w-full py-4 px-2 sm:px-10 rounded-lg border border-slate-1 shadow-md sm:shadow-none"
               >
                 <div className="flex items-center gap-4">
-                  <CircleUnChecked className="hidden sm:block" />
                   <div className="flex flex-col gap-2">
                     <h4 className="title-md text-slate-3">
                       {task.title.charAt(0).toUpperCase() + task.title.slice(1)}
