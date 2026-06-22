@@ -2,6 +2,9 @@
 import { useState, useEffect } from "react";
 
 // components
+import TaskDetailsModal from "./taskDetailsModal";
+
+// libs
 import { getAllTasksApi } from "@/src/lib/api/projects/getAllTasks";
 import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
 
@@ -15,9 +18,14 @@ import { Task, Member } from "@/src/types/projectType";
 // icons
 import EditIcon from "../../icons/editIcon";
 
+// redux
+import { useDispatch } from "react-redux";
+import { openTaskDetails } from "@/src/lib/redux/feature/taskModalSlice";
+
 const TasksListView = ({ projectId }: { projectId: string }) => {
   const [tasks, setTasks] = useState<Task[] | null>([]);
   const [members, setMembers] = useState<Member[]>([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchData() {
@@ -40,7 +48,9 @@ const TasksListView = ({ projectId }: { projectId: string }) => {
             <th className="label-sm text-slate-2 py-4 pl-4 md:pl-10 text-left w-1/6 whitespace-nowrap">
               Task ID
             </th>
-            <th className="label-sm text-slate-2 py-4 text-left w-1/5 whitespace-nowrap">Title</th>
+            <th className="label-sm text-slate-2 py-4 text-left w-1/5 whitespace-nowrap">
+              Title
+            </th>
             <th className="label-sm text-slate-2 py-4 pr-10 text-left w-1/6 whitespace-nowrap">
               Status
             </th>
@@ -59,7 +69,11 @@ const TasksListView = ({ projectId }: { projectId: string }) => {
               (m) => m.user_id === task.assignee?.id,
             );
             return (
-              <tr key={task.task_id}>
+              <tr
+                key={task.task_id}
+                onClick={() => dispatch(openTaskDetails(task.id))}
+                className="cursor-pointer"
+              >
                 <td className="py-4 px-4 md:px-10 text-left">
                   <span className="body-md text-primary">{task.task_id}</span>
                 </td>
@@ -104,6 +118,7 @@ const TasksListView = ({ projectId }: { projectId: string }) => {
           <p>{">"}</p>
         </div>
       </div>
+      <TaskDetailsModal />
     </div>
   );
 };

@@ -2,12 +2,19 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
+// components
+import TaskDetailsModal from "./taskDetailsModal";
+
 // libs
 import { getTasksByStatusApi } from "@/src/lib/api/projects/getTasksByStatus";
 import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
 
 // types
 import { Task, Member } from "@/src/types/projectType";
+
+// redux
+import { useDispatch } from "react-redux";
+import { openTaskDetails } from "@/src/lib/redux/feature/taskModalSlice";
 
 // icons
 import CircledPlus from "../../icons/circledPlus";
@@ -27,6 +34,7 @@ const TasksBoardView = ({ projectId }: { projectId: string }) => {
     {},
   );
   const [members, setMembers] = useState<Member[]>([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchData() {
@@ -88,7 +96,8 @@ const TasksBoardView = ({ projectId }: { projectId: string }) => {
                 return (
                   <div
                     key={task.task_id}
-                    className={`flex flex-col gap-4 rounded-lg p-6 w-full hover:shadow-md transition-shadow duration-200 ${status === `IN_PROGRESS` ? `border-l-4 border-primary` : status === `BLOCKED` ? `bg-error/5 border border-error/20` : status === `DONE` ? `bg-success/10` : `bg-white`}`}
+                    onClick={() => dispatch(openTaskDetails(task.id))}
+                    className={`flex flex-col gap-4 rounded-lg p-6 w-full hover:shadow-md transition-shadow duration-200 cursor-pointer ${status === `IN_PROGRESS` ? `border-l-4 border-primary` : status === `BLOCKED` ? `bg-error/5 border border-error/20` : status === `DONE` ? `bg-success/10` : `bg-white`}`}
                   >
                     <h4 className="text-sm font-medium text-slate-3 mb-2">
                       {task.title.charAt(0).toUpperCase() + task.title.slice(1)}
@@ -121,6 +130,7 @@ const TasksBoardView = ({ projectId }: { projectId: string }) => {
           </div>
         );
       })}
+      <TaskDetailsModal />
     </section>
   );
 };

@@ -19,6 +19,10 @@ import { getTasksByEpicApi } from "@/src/lib/api/projects/getTasksByEpic";
 // libs
 import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
 
+// redux
+import { useDispatch } from "react-redux";
+import { openTaskDetails } from "@/src/lib/redux/feature/taskModalSlice";
+
 // utils
 import { formatDate } from "@/src/lib/utils/formatDate";
 import { getInitials } from "@/src/lib/utils/initials";
@@ -27,11 +31,13 @@ import CircledPlus from "../../icons/circledPlus";
 interface TaskListProp {
   projectId: string;
   epic: Epic | null;
+  onClose: () => void;
 }
 
-const TaskList = ({ projectId, epic }: TaskListProp) => {
+const TaskList = ({ projectId, epic, onClose }: TaskListProp) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchTasksByEpic() {
@@ -78,7 +84,11 @@ const TaskList = ({ projectId, epic }: TaskListProp) => {
             return (
               <div
                 key={task.task_id}
-                className="flex items-center justify-between w-full py-4 px-2 sm:px-10 rounded-lg border border-slate-1 shadow-md sm:shadow-none"
+                onClick={() => {
+                  onClose();
+                  dispatch(openTaskDetails(task.id));
+                }}
+                className="flex items-center justify-between w-full py-4 px-2 sm:px-10 rounded-lg border border-slate-1 shadow-md sm:shadow-none cursor-pointer"
               >
                 <div className="flex items-center gap-4">
                   <div className="flex flex-col gap-2">

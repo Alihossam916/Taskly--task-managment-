@@ -9,6 +9,7 @@ import BreadCrumb from "../../ui/breadCrumb";
 import InfiniteScrollLoader from "../../ui/infiniteScrollLoader";
 import Pagination from "../../ui/pagination";
 import EpicDetailsModal from "./epicDetailsModal";
+import TaskDetailsModal from "./taskDetailsModal";
 
 // types
 import { ProjectEpicsListProps } from "@/src/types/projectType";
@@ -181,6 +182,7 @@ const ProjectEpicsList = ({
       >
         +
       </Link>
+      <TaskDetailsModal />
     </div>
   );
 };
