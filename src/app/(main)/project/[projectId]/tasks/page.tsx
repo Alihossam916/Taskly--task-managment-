@@ -20,11 +20,11 @@ const ProjectTasksPage = async ({ params, searchParams }: Props) => {
   return (
     <div className="mb-30 mt-5 max-w-full overflow-x-hidden">
       {/* page header */}
-      <TasksHeader project={project} projectId={projectId} />
+      <TasksHeader project={project} projectId={projectId} view={view} />
       {view === "board" ? (
         <TasksBoardView projectId={projectId} />
       ) : (
-        <TasksListView />
+        <TasksListView projectId={projectId} />
       )}
       <TasksMobileView projectId={projectId} />
     </div>
