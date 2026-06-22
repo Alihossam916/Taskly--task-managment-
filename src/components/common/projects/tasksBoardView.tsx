@@ -19,18 +19,10 @@ import WarningIcon from "../../icons/warningIcon";
 import { formatDate } from "@/src/lib/utils/formatDate";
 import { getInitials } from "@/src/lib/utils/initials";
 
-const TasksBoardView = ({ projectId }: { projectId: string }) => {
-  const statuses = [
-    "TO_DO",
-    "IN_PROGRESS",
-    "BLOCKED",
-    "IN_REVIEW",
-    "READY_FOR_QA",
-    "REOPENED",
-    "READY_FOR_PRODUCTION",
-    "DONE",
-  ];
+// constants
+import { statuses } from "@/src/constants/taskStatuses";
 
+const TasksBoardView = ({ projectId }: { projectId: string }) => {
   const [tasksByStatus, setTasksByStatus] = useState<Record<string, Task[]>>(
     {},
   );
@@ -54,7 +46,7 @@ const TasksBoardView = ({ projectId }: { projectId: string }) => {
   }, [projectId]);
 
   return (
-    <section className="flex gap-8 overflow-x-auto min-w-0 w-full overflow-y-hidden">
+    <section className="hidden sm:flex gap-8 overflow-x-auto min-w-0 w-full overflow-y-hidden">
       {statuses.map((status) => {
         const tasks = tasksByStatus[status] ?? [];
         return (
