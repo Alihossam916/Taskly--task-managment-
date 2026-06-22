@@ -17,9 +17,11 @@ const ViewSelector = dynamic(() => import("./viewSelector"), { ssr: false });
 const TasksHeader = ({
   project,
   projectId,
+  view,
 }: {
   project: Project | null;
   projectId: string;
+  view: string;
 }) => {
   return (
     <>
@@ -47,7 +49,9 @@ const TasksHeader = ({
             />
           </div>
           <ViewSelector />
-          <Button className="bg-primary-container/30 hidden sm:block">
+          <Button
+            className={`bg-primary-container/30 ${view === `list` ? `hidden` : `hidden sm:block`}`}
+          >
             <FilterIcon className="text-black" />
           </Button>
         </div>
