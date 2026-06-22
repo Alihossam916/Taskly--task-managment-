@@ -60,7 +60,7 @@ const ViewSelector = () => {
           color: "#041B3C",
         }),
       }}
-      className="w-full"
+      className="w-full hidden sm:block"
     />
   );
 };
