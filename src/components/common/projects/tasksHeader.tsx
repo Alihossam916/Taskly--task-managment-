@@ -21,7 +21,7 @@ const TasksHeader = ({
 }: {
   project: Project | null;
   projectId: string;
-  view: string;
+  view: string | undefined;
 }) => {
   return (
     <>
