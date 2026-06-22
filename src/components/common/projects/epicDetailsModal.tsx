@@ -26,7 +26,6 @@ import { getEpicDetails } from "@/src/lib/api/projects/getEpicDetails";
 import EpicTitleInput from "./updateEpic/epicTitleInput";
 import EpicDescription from "./updateEpic/epicDescription";
 import EpicAssigneeSelect from "./updateEpic/epicAssigneeSelect";
-import TaskList from "./taskList";
 import Spinner from "../../ui/spinner";
 
 // icons
@@ -263,7 +262,11 @@ const EpicDetailsModal = ({
             </section>
 
             {/* tasks section */}
-            <DynamicTaskList projectId={projectId} epic={epic} />
+            <DynamicTaskList
+              projectId={projectId}
+              epic={epic}
+              onClose={onClose}
+            />
           </div>
         </form>
       </FormProvider>
