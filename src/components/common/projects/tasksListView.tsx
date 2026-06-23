@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 // components
 import TaskDetailsModal from "./taskDetailsModal";
@@ -40,8 +41,32 @@ const TasksListView = ({ projectId }: { projectId: string }) => {
     fetchData();
   }, [projectId]);
 
+  const hasNoTasks = !tasks || tasks.length === 0;
+
+  if (hasNoTasks) {
+    return (
+      <div className="flex-col items-center justify-center gap-6 py-20 mt-10 hidden sm:flex">
+        <div className="size-16 bg-surface-low rounded-full flex items-center justify-center">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 5H7C5.89543 5 5 5.89543 5 7V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V7C19 5.89543 18.1046 5 17 5H15M9 5C9 6.10457 9.89543 7 11 7H13C14.1046 7 15 6.10457 15 5M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5M12 12H15M12 16H15M9 12H9.01M9 16H9.01" stroke="#4F5F7B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+        <div className="text-center">
+          <h3 className="headline-lg text-slate-3 mb-2">Task not found</h3>
+          <p className="body-md text-slate-2">Get started by creating your first task</p>
+        </div>
+        <Link
+          href={`/project/${projectId}/tasks/new`}
+          className="bg-primary text-white py-3 px-6 rounded-lg hover:opacity-90 transition-opacity duration-200 font-medium"
+        >
+          Add new task
+        </Link>
+      </div>
+    );
+  }
+
   return (
-    <div className="mt-10 w-full mx-auto hidden sm:block">
+    <div className="mt-10 w-full mx-auto hidden sm:block relative">
       <table className=" max-w-full mx-auto min-w-150">
         <thead className="bg-surface-low">
           <tr className="uppercase">
@@ -126,6 +151,12 @@ const TasksListView = ({ projectId }: { projectId: string }) => {
           <p>{">"}</p>
         </div>
       </div>
+      <Link
+        href={`/project/${projectId}/tasks/new`}
+        className="fixed p-4 bg-primary size-12 bottom-15 right-5 z-50 text-white text-2xl rounded-sm flex items-center justify-center"
+      >
+        +
+      </Link>
       <TaskDetailsModal />
     </div>
   );
