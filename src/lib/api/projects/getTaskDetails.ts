@@ -5,7 +5,7 @@ import { Task } from "@/src/types/projectType";
 const baseUrl = process.env.SUPABASE_URL!;
 const anonKey = process.env.SUPABASE_ANON_KEY!;
 
-export async function getTasksByStatusApi(
+export async function getTaskDetails(
   task_id: string,
   projectId: string,
 ): Promise<Task | null> {
