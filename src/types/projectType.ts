@@ -21,6 +21,7 @@ export interface ProjectEpicsListProps {
 export interface MemberMetadata {
   name: string;
   email: string;
+  job: string;
 }
 
 export interface Member {
@@ -48,7 +49,12 @@ export interface Epic {
   created_by: UserRef;
   assignee?: UserRef;
 }
-
+export interface CreatedByTask {
+  name: string;
+  email: string;
+  department: string | null;
+  id: string;
+}
 export interface Task {
   id: string;
   task_id: string;
@@ -58,7 +64,7 @@ export interface Task {
   description?: string;
   due_date?: string;
   created_at: string;
-  created_by: string;
+  created_by: CreatedByTask;
   assignee?: { id: string };
   status: string;
 }
