@@ -71,7 +71,15 @@ const TasksListView = ({ projectId }: { projectId: string }) => {
             return (
               <tr
                 key={task.task_id}
-                onClick={() => dispatch(openTaskDetails(task.id))}
+                onClick={() =>
+                  dispatch(
+                    openTaskDetails({
+                      taskId: task.id,
+                      projectId,
+                      epicId: task.epic_id,
+                    }),
+                  )
+                }
                 className="cursor-pointer"
               >
                 <td className="py-4 px-4 md:px-10 text-left">

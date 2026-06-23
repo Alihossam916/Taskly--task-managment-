@@ -86,7 +86,13 @@ const TaskList = ({ projectId, epic, onClose }: TaskListProp) => {
                 key={task.task_id}
                 onClick={() => {
                   onClose();
-                  dispatch(openTaskDetails(task.id));
+                  dispatch(
+                    openTaskDetails({
+                      taskId: task.id,
+                      projectId,
+                      epicId: task.epic_id,
+                    }),
+                  );
                 }}
                 className="flex items-center justify-between w-full py-4 px-2 sm:px-10 rounded-lg border border-slate-1 shadow-md sm:shadow-none cursor-pointer"
               >

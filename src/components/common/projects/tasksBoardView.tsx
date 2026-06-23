@@ -96,7 +96,15 @@ const TasksBoardView = ({ projectId }: { projectId: string }) => {
                 return (
                   <div
                     key={task.task_id}
-                    onClick={() => dispatch(openTaskDetails(task.id))}
+                    onClick={() =>
+                      dispatch(
+                        openTaskDetails({
+                          taskId: task.id,
+                          projectId,
+                          epicId: task.epic_id,
+                        }),
+                      )
+                    }
                     className={`flex flex-col gap-4 rounded-lg p-6 w-full hover:shadow-md transition-shadow duration-200 cursor-pointer ${status === `IN_PROGRESS` ? `border-l-4 border-primary` : status === `BLOCKED` ? `bg-error/5 border border-error/20` : status === `DONE` ? `bg-success/10` : `bg-white`}`}
                   >
                     <h4 className="text-sm font-medium text-slate-3 mb-2">
