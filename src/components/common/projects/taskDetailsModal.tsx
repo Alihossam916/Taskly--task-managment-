@@ -53,6 +53,14 @@ const TaskDetailsModal = () => {
     fetchData();
   }, [selectedProjectId, selectedTaskId, taskEpicId]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") dispatch(closeTaskDetails());
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [dispatch]);
+
   if (!taskDetailsOpen || !selectedTaskId) return null;
 
   const taskAssignee = members?.find(
