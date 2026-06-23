@@ -10,6 +10,7 @@ import InfiniteScrollLoader from "../../ui/infiniteScrollLoader";
 import Pagination from "../../ui/pagination";
 import EpicDetailsModal from "./epicDetailsModal";
 import TaskDetailsModal from "./taskDetailsModal";
+import TaskDetailsMobile from "./taskDetailsMobile";
 
 // types
 import { ProjectEpicsListProps } from "@/src/types/projectType";
@@ -183,6 +184,7 @@ const ProjectEpicsList = ({
         +
       </Link>
       <TaskDetailsModal />
+      <TaskDetailsMobile/>
     </div>
   );
 };
