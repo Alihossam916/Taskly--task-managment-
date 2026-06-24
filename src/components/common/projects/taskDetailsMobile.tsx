@@ -161,7 +161,7 @@ const TaskDetailsMobile = () => {
                 className="flex items-center gap-2 w-fit px-2"
               >
                 <h5 className="label-sm">
-                  {taskDetails?.status.replace("_", " ")}
+                  {taskDetails?.status?.replace("_", " ")}
                 </h5>
               </Badge>
               <Badge
