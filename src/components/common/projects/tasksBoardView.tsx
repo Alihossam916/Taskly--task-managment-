@@ -34,7 +34,17 @@ import { getInitials } from "@/src/lib/utils/initials";
 // constants
 import { statuses } from "@/src/constants/taskStatuses";
 
-const TasksBoardView = ({ projectId }: { projectId: string }) => {
+const TasksBoardView = ({
+  projectId,
+  currentPage,
+  limit,
+  offset,
+}: {
+  projectId: string;
+  currentPage: number;
+  limit: number;
+  offset: number;
+}) => {
   const [tasks, setTasks] = useState<Task[] | null>([]);
   const [members, setMembers] = useState<Member[]>([]);
   const [totalTasks, setTotalTasks] = useState(0);
@@ -43,7 +53,7 @@ const TasksBoardView = ({ projectId }: { projectId: string }) => {
   useEffect(() => {
     async function fetchData() {
       const [tasksData, membersData] = await Promise.all([
-        getAllTasksApi(projectId, 5, 0),
+        getAllTasksApi(projectId, limit, offset),
         getProjectMembers(projectId),
       ]);
       const { tasks, total } = tasksData || { tasks: [], total: 0 };
@@ -52,18 +62,24 @@ const TasksBoardView = ({ projectId }: { projectId: string }) => {
       setTotalTasks(total);
     }
     fetchData();
-  }, [projectId]);
+  }, [projectId, limit, offset]);
 
   const {
     items: displayedTasks,
     loading,
     hasMore,
     loadMore,
-  } = useInfiniteScroll<Task>(tasks ?? [], totalTasks, 1, 5, async (l, o) => {
-    const res = await getAllTasksApi(projectId, l, o);
-    if (!res) return null;
-    return { items: res.tasks, total: res.total };
-  });
+  } = useInfiniteScroll<Task>(
+    tasks ?? [],
+    totalTasks,
+    currentPage,
+    limit,
+    async (l, o) => {
+      const res = await getAllTasksApi(projectId, l, o);
+      if (!res) return null;
+      return { items: res.tasks, total: res.total };
+    },
+  );
 
   const tasksByStatus = useMemo(() => {
     const grouped: Record<string, Task[]> = {};
