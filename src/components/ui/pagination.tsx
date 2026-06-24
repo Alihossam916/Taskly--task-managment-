@@ -1,5 +1,6 @@
+"use client";
 import Link from "next/link";
-// remember to apply amazon pagination after finishing more tasks
+import { useSearchParams } from "next/navigation";
 
 interface PaginationProps {
   basePath: string;
@@ -23,10 +24,12 @@ const Pagination = ({
   mode = "numbered",
 }: PaginationProps) => {
   const totalPages = Math.ceil(total / limit);
+  const searchParams = useSearchParams();
 
   const buildHref = (pageNumber: number) => {
-    const separator = basePath.includes("?") ? "&" : "?";
-    return `${basePath}${separator}${pageParam}=${pageNumber}`;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(pageParam, String(pageNumber));
+    return `${basePath}?${params.toString()}`;
   };
 
   return (
