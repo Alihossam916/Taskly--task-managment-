@@ -26,7 +26,12 @@ const ProjectTasksPage = async ({ params, searchParams }: Props) => {
       {/* page header */}
       <TasksHeader project={project} projectId={projectId} view={view} />
       {view === "board" ? (
-        <TasksBoardView projectId={projectId} />
+        <TasksBoardView
+          projectId={projectId}
+          currentPage={currentPage}
+          limit={limit}
+          offset={offset}
+        />
       ) : (
         <TasksListView
           projectId={projectId}
