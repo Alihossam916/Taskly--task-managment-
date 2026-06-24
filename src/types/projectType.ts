@@ -68,3 +68,10 @@ export interface Task {
   assignee?: { id: string };
   status: string;
 }
+
+export interface TaskViewProps {
+  projectId: string;
+  currentPage: number;
+  limit: number;
+  offset: number;
+}
