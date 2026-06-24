@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from "react";
 import TaskDetailsModal from "./taskDetailsModal";
 import EmptyTasks from "./emptyTasks";
 import InfiniteScrollLoader from "../../ui/infiniteScrollLoader";
+import TasksBoardSkeleton from "./tasksBoardSkeleton";
 
 // libs
 import { getAllTasksApi } from "@/src/lib/api/projects/getAllTasks";
@@ -48,10 +49,12 @@ const TasksBoardView = ({
   const [tasks, setTasks] = useState<Task[] | null>([]);
   const [members, setMembers] = useState<Member[]>([]);
   const [totalTasks, setTotalTasks] = useState(0);
+  const [initialLoading, setInitialLoading] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchData() {
+      setInitialLoading(true);
       const [tasksData, membersData] = await Promise.all([
         getAllTasksApi(projectId, limit, offset),
         getProjectMembers(projectId),
@@ -60,6 +63,7 @@ const TasksBoardView = ({
       setTasks(tasks || null);
       setMembers(membersData ?? []);
       setTotalTasks(total);
+      setInitialLoading(false);
     }
     fetchData();
   }, [projectId, limit, offset]);
@@ -93,6 +97,14 @@ const TasksBoardView = ({
   }, [displayedTasks]);
 
   const hasNoTasks = displayedTasks.length === 0 && !loading;
+
+  if (initialLoading) {
+    return (
+      <div className="hidden sm:block">
+        <TasksBoardSkeleton />
+      </div>
+    );
+  }
 
   if (hasNoTasks) {
     return (

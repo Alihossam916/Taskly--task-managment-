@@ -6,6 +6,7 @@ import Link from "next/link";
 import TaskDetailsModal from "./taskDetailsModal";
 import Pagination from "../../ui/pagination";
 import EmptyTasks from "./emptyTasks";
+import TasksListSkeleton from "./tasksListSkeleton";
 
 // libs
 import { getAllTasksApi } from "@/src/lib/api/projects/getAllTasks";
@@ -38,9 +39,11 @@ const TasksListView = ({
   const [members, setMembers] = useState<Member[]>([]);
   const dispatch = useDispatch();
   const [totalTasks, setTotalTasks] = useState<number>(0);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
+      setInitialLoading(true);
       const [tasksData, membersData] = await Promise.all([
         getAllTasksApi(projectId, limit, offset),
         getProjectMembers(projectId),
@@ -53,6 +56,7 @@ const TasksListView = ({
       setTasks(tasks || null);
       setMembers(membersData ?? []);
       setTotalTasks(total);
+      setInitialLoading(false);
     }
     fetchData();
   }, [projectId, limit, offset]);
@@ -68,6 +72,10 @@ const TasksListView = ({
       return { items: res.tasks, total: res.total };
     },
   );
+
+  if (initialLoading) {
+    return <TasksListSkeleton />;
+  }
 
   if (totalTasks === 0) {
     return (

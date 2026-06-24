@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 // components
 import TaskDetailsMobile from "./taskDetailsMobile";
 import InfiniteScrollLoader from "../../ui/infiniteScrollLoader";
+import TasksMobileSkeleton from "./tasksMobileSkeleton";
 import EmptyTasks from "./emptyTasks";
 
 // types
@@ -37,9 +38,11 @@ const TasksMobileView = ({
   const [members, setMembers] = useState<Member[]>([]);
   const dispatch = useDispatch();
   const [totalTasks, setTotalTasks] = useState<number>(0);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
+      setInitialLoading(true);
       const [tasksData, membersData] = await Promise.all([
         getAllTasksApi(projectId, limit, offset),
         getProjectMembers(projectId),
@@ -52,6 +55,7 @@ const TasksMobileView = ({
       setTasks(tasks || null);
       setMembers(membersData ?? []);
       setTotalTasks(total);
+      setInitialLoading(false);
     }
     fetchData();
   }, [projectId, limit, offset]);
@@ -72,6 +76,14 @@ const TasksMobileView = ({
       return { items: res.tasks, total: res.total };
     },
   );
+
+  if (initialLoading) {
+    return (
+      <div className="sm:hidden">
+        <TasksMobileSkeleton />
+      </div>
+    );
+  }
 
   if (totalTasks === 0) {
     return (
