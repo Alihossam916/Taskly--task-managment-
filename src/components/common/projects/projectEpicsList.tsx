@@ -169,14 +169,16 @@ const ProjectEpicsList = ({
         onLoadMore={loadMoreEpics}
         label={"epics"}
       />
-      <Pagination
-        basePath={`/project/${projectId}/epics`}
-        currentPage={currentPage}
-        limit={limit}
-        total={total}
-        displayedCount={displayedEpics.length}
-        itemLabel="epics"
-      />{" "}
+      <div className="mt-20">
+        <Pagination
+          basePath={`/project/${projectId}/epics`}
+          currentPage={currentPage}
+          limit={limit}
+          total={total}
+          displayedCount={displayedEpics.length}
+          itemLabel="epics"
+        />{" "}
+      </div>
       <Link
         href={`/project/${projectId}/epics/new`}
         className="fixed sm:hidden p-4 bg-primary size-12 bottom-30 right-5 z-40 text-white text-2xl rounded-sm flex items-center justify-center"
@@ -184,7 +186,7 @@ const ProjectEpicsList = ({
         +
       </Link>
       <TaskDetailsModal />
-      <TaskDetailsMobile/>
+      <TaskDetailsMobile />
     </div>
   );
 };
