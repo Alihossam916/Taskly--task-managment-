@@ -119,14 +119,16 @@ const ProjectList = ({
         onLoadMore={loadMoreProjects}
         label={"projects"}
       />
-      <Pagination
-        basePath="/project"
-        currentPage={currentPage}
-        limit={limit}
-        total={total}
-        displayedCount={displayedProjects.length}
-        itemLabel="active projects"
-      />{" "}
+      <div className="mt-20">
+        <Pagination
+          basePath="/project"
+          currentPage={currentPage}
+          limit={limit}
+          total={total}
+          displayedCount={displayedProjects.length}
+          itemLabel="active projects"
+        />{" "}
+      </div>
       <Link
         href={"/project/add"}
         className="fixed sm:hidden p-4 bg-primary size-12 bottom-30 right-5 z-50 text-white text-2xl rounded-sm flex items-center justify-center"

@@ -3,14 +3,17 @@ import React from "react";
 interface BadgeProp {
   children: React.ReactNode;
   className?: string;
-  variant?: "primary" | "secondary" | "ghost";
+  variant?: "primary" | "secondary" | "ghost" | "error" | "success" | "none";
 }
 
 const Badge = ({ children, className, variant = "primary" }: BadgeProp) => {
   const variants = {
     primary: "bg-primary text-white",
     secondary: "text-primary bg-surface-highest",
-    ghost: " text-slate-2 bg-slate-1",
+    ghost: " text-slate-3 bg-surface-highest",
+    error: "text-error bg-error/20",
+    success: "text-slate-3 bg-success",
+    none: "",
   };
 
   return (

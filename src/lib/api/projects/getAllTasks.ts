@@ -1,33 +1,28 @@
 "use server";
-import { getAccessToken } from "../../utils/cookies";
+import { apiClient } from "../client";
 import { Task } from "@/src/types/projectType";
-
-const baseUrl = process.env.SUPABASE_URL!;
-const anonKey = process.env.SUPABASE_ANON_KEY!;
 
 export async function getAllTasksApi(
   projectId: string,
-): Promise<Task[] | null> {
-  const token = await getAccessToken();
-  if (!token) {
-    throw new Error("unauthorized");
-  }
-
+  limit: number,
+  offset: number,
+): Promise<{ tasks: Task[]; total: number } | null> {
   try {
-    const response = await fetch(
-      `${baseUrl}/rest/v1/project_tasks?project_id=eq.${projectId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          apikey: anonKey,
-          "Content-Type": "application/json",
-        },
+    const response = await apiClient("/rest/v1/project_tasks", {
+      params: {
+        project_id: `eq.${projectId}`,
+        limit: String(limit),
+        offset: String(offset),
       },
-    );
+      headers: {
+        Prefer: "count=exact",
+      },
+    });
     if (response.ok) {
       const tasks: Task[] = await response.json();
-      return tasks;
+      const total =
+        Number(response.headers.get("content-range")?.split("/")[1]) || 0;
+      return { tasks, total };
     }
     return null;
   } catch {

@@ -9,6 +9,7 @@ interface InfiniteScrollLoaderProps {
   hasItems: boolean;
   label: string;
   onLoadMore: () => void;
+  mobileOnly?: boolean;
 }
 
 const InfiniteScrollLoader = ({
@@ -17,6 +18,7 @@ const InfiniteScrollLoader = ({
   hasItems,
   label,
   onLoadMore,
+  mobileOnly = true,
 }: InfiniteScrollLoaderProps) => {
   const observerTarget = useRef<HTMLDivElement>(null);
 
@@ -25,7 +27,7 @@ const InfiniteScrollLoader = ({
       (entries) => {
         if (
           entries[0].isIntersecting &&
-          window.innerWidth < mobileView &&
+          (mobileOnly ? window.innerWidth < mobileView : true) &&
           hasMore &&
           !loading
         ) {
@@ -40,12 +42,12 @@ const InfiniteScrollLoader = ({
     }
 
     return () => observer.disconnect();
-  }, [onLoadMore, hasMore, loading]);
+  }, [onLoadMore, hasMore, loading, mobileOnly]);
 
   return (
     <div
       ref={observerTarget}
-      className="flex justify-center py-8 sm:hidden h-20"
+      className={`flex justify-center py-8 h-20 ${mobileOnly ? "sm:hidden" : ""}`}
     >
       {loading && <Spinner className="size-8!" />}
       {!hasMore && hasItems && (

@@ -46,6 +46,7 @@ const ViewSelector = () => {
           fontSize: 14,
           boxShadow: "none",
           "&:hover": { borderColor: "#c3c6d6" },
+          cursor: "pointer",
         }),
         indicatorSeparator: () => ({ display: "none" }),
         dropdownIndicator: (base) => ({ ...base, color: "#041B3C" }),
@@ -58,6 +59,7 @@ const ViewSelector = () => {
               ? "#f1f3ff"
               : "white",
           color: "#041B3C",
+          cursor: "pointer",
         }),
       }}
       className="w-full hidden sm:block"

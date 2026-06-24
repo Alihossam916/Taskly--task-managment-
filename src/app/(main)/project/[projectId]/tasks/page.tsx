@@ -9,7 +9,7 @@ import { getProjectById } from "@/src/lib/api/projects/getProjectById";
 
 interface Props {
   params: Promise<{ projectId: string }>;
-  searchParams: Promise<{ view?: string }>;
+  searchParams: Promise<{ view?: string; page?: string }>;
 }
 
 const ProjectTasksPage = async ({ params, searchParams }: Props) => {
@@ -17,16 +17,35 @@ const ProjectTasksPage = async ({ params, searchParams }: Props) => {
   const { view } = await searchParams;
   const project = await getProjectById(projectId);
 
+  const currentPage = Number((await searchParams).page) || 1;
+  const limit = 5;
+  const offset = (currentPage - 1) * limit;
+
   return (
     <div className="mb-30 mt-5 max-w-full overflow-x-hidden">
       {/* page header */}
       <TasksHeader project={project} projectId={projectId} view={view} />
       {view === "board" ? (
-        <TasksBoardView projectId={projectId} />
+        <TasksBoardView
+          projectId={projectId}
+          currentPage={currentPage}
+          limit={limit}
+          offset={offset}
+        />
       ) : (
-        <TasksListView projectId={projectId} />
+        <TasksListView
+          projectId={projectId}
+          currentPage={currentPage}
+          limit={limit}
+          offset={offset}
+        />
       )}
-      <TasksMobileView projectId={projectId} />
+      <TasksMobileView
+        projectId={projectId}
+        currentPage={currentPage}
+        limit={limit}
+        offset={offset}
+      />
     </div>
   );
 };
