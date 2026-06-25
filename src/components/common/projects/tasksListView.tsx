@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
@@ -13,22 +13,12 @@ import TasksListSkeleton from "./tasksListSkeleton";
 import { getAllTasksApi } from "@/src/lib/api/projects/getAllTasks";
 import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
 
-// utils
-import { getInitials } from "@/src/lib/utils/initials";
-import { formatDate } from "@/src/lib/utils/formatDate";
-
 // types
 import { Task, Member, TaskViewProps } from "@/src/types/projectType";
 
-// icons
-import EditIcon from "../../icons/editIcon";
-
-// redux
-import { useDispatch } from "react-redux";
-import { openTaskDetails } from "@/src/lib/redux/feature/taskModalSlice";
-
 // hooks
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
+import TaskListCard from "../../ui/taskListCard";
 
 const TasksListView = ({
   projectId,
@@ -38,7 +28,6 @@ const TasksListView = ({
 }: TaskViewProps) => {
   const [tasks, setTasks] = useState<Task[] | null>([]);
   const [members, setMembers] = useState<Member[]>([]);
-  const dispatch = useDispatch();
   const [totalTasks, setTotalTasks] = useState<number>(0);
   const [initialLoading, setInitialLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -146,49 +135,13 @@ const TasksListView = ({
               (m) => m.user_id === task.assignee?.id,
             );
             return (
-              <tr
-                key={task.task_id}
-                onClick={() =>
-                  dispatch(
-                    openTaskDetails({
-                      taskId: task.id,
-                      projectId,
-                      epicId: task.epic_id,
-                    }),
-                  )
-                }
-                className="cursor-pointer"
-              >
-                <td className="py-4 px-4 md:px-10 text-left">
-                  <span className="body-md text-primary">{task.task_id}</span>
-                </td>
-                <td className="py-4 text-left">
-                  <span className="body-md font-semibold text-slate-3 truncate block max-w-xs">
-                    {task.title.charAt(0).toUpperCase() + task.title.slice(1)}
-                  </span>
-                </td>
-                <td className="py-4 pr-10 text-left">
-                  <p
-                    className={`w-fit py-1 px-2 rounded-xs label-sm ${task.status === "DONE" ? `bg-success` : task.status === "BLOCKED" ? `bg-error/20 text-error` : `bg-surface-highest`}`}
-                  >
-                    {task.status}
-                  </p>
-                </td>
-                <td className="py-4 pr-10 body-md text-slate-2 text-left whitespace-nowrap">
-                  {task.due_date ? formatDate(task.due_date) : "—"}
-                </td>
-                <td className="py-4 pr-10 text-right flex gap-2 items-center">
-                  <span className="bg-primary-container p-2 rounded-full text-white">
-                    {getInitials(assignee?.metadata.name) || "UN"}
-                  </span>
-                  <span className="body-md text-slate-2">
-                    {assignee?.metadata?.name || "Unassigned"}
-                  </span>
-                </td>
-                <td className="py-4 text-left">
-                  <EditIcon className="p-2 size-8 hover:bg-slate-1 text-slate-2 cursor-pointer transition-colors duration-200 rotate-90" />
-                </td>
-              </tr>
+              <Fragment key={task.task_id}>
+                <TaskListCard
+                  task={task}
+                  projectId={projectId}
+                  assignee={assignee}
+                />
+              </Fragment>
             );
           })}
         </tbody>
