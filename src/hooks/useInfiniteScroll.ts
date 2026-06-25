@@ -51,5 +51,5 @@ export const useInfiniteScroll = <T>(
     }
   }, [loading, hasMore, page, limit, total, items.length, fetchFn]);
 
-  return { items, loading, hasMore, loadMore };
+  return { items, setItems, loading, hasMore, loadMore };
 };
