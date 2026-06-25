@@ -14,7 +14,7 @@ import SearchIcon from "@/src/components/icons/searchIcon";
 import FilterIcon from "@/src/components/icons/filterIcon";
 import { Project } from "@/src/types/projectType";
 
-const ViewSelector = dynamic(() => import("./viewSelector"), { ssr: false });
+const ViewSelector = dynamic(() => import("../../ui/viewSelector"), { ssr: false });
 
 const TasksHeader = ({
   project,
