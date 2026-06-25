@@ -23,29 +23,40 @@ const ProjectEpicsList = dynamic(
 
 interface Props {
   params: Promise<{ projectId: string }>;
-  searchParams: Promise<{ page?: string }>;
+  searchParams: Promise<{ page?: string; q?: string }>;
 }
 
 export default async function ProjectEpicPage({ params, searchParams }: Props) {
   const { projectId } = await params;
 
-  const currentPage = Number((await searchParams).page) || 1;
+  const resolvedSearch = await searchParams;
+  const currentPage = Number(resolvedSearch.page) || 1;
+  // `q` lets server-side render the first page already filtered (e.g. bookmarked URL)
+  const initialSearchTerm = resolvedSearch.q?.trim() ?? "";
   const limit = 6;
   const offset = (currentPage - 1) * limit;
 
   const [project, epicsData] = await Promise.all([
     getProjectById(projectId),
-    getProjectEpics(projectId, limit, offset),
+    getProjectEpics(
+      projectId,
+      limit,
+      offset,
+      initialSearchTerm || undefined,
+    ),
   ]);
 
   const { epics, total } = epicsData || { epics: [], total: 0 };
-  // ---------- Empty state ----------
-  if (!epics || epics.length === 0) {
+
+  // ---------- Empty state (no epics at ALL in the project) ----------
+  // Only show the marketing empty state when there is no active search
+  // so that a "no results" search doesn't incorrectly show the onboarding screen.
+  if ((!epics || epics.length === 0) && !initialSearchTerm) {
     return (
       <div className="flex flex-col gap-8 items-center mx-auto my-20">
         <NoEpicsIcon className="shadow-xl/20 shadow-primary-container rounded-lg" />
         <h1 className="headline-lg text-slate-3">
-          No epics in this project yet.
+          No epics found for this project
         </h1>
         <p className="body-md text-slate-2 text-center font-semibold">
           Break down your large project into manageable <br /> epics to track
@@ -96,6 +107,7 @@ export default async function ProjectEpicPage({ params, searchParams }: Props) {
       total={total}
       currentPage={currentPage}
       limit={limit}
+      hasError={!epicsData}
     />
   );
 }

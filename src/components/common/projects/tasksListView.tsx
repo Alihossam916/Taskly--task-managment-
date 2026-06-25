@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 // components
 import TaskDetailsModal from "./taskDetailsModal";
@@ -40,26 +41,39 @@ const TasksListView = ({
   const dispatch = useDispatch();
   const [totalTasks, setTotalTasks] = useState<number>(0);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
+
+  const searchParams = useSearchParams();
+  const q = searchParams.get("q") || "";
 
   useEffect(() => {
     async function fetchData() {
       setInitialLoading(true);
-      const [tasksData, membersData] = await Promise.all([
-        getAllTasksApi(projectId, limit, offset),
-        getProjectMembers(projectId),
-      ]);
-      const { tasks, total } = tasksData || {
-        currentTasks: [],
-        total: 0,
-      };
-
-      setTasks(tasks || null);
-      setMembers(membersData ?? []);
-      setTotalTasks(total);
-      setInitialLoading(false);
+      setHasError(false);
+      try {
+        const [tasksData, membersData] = await Promise.all([
+          getAllTasksApi(projectId, limit, offset, q || undefined),
+          getProjectMembers(projectId),
+        ]);
+        if (!tasksData) {
+          setHasError(true);
+          setTasks([]);
+          setTotalTasks(0);
+        } else {
+          setTasks(tasksData.tasks || null);
+          setTotalTasks(tasksData.total);
+        }
+        setMembers(membersData ?? []);
+      } catch {
+        setHasError(true);
+        setTasks([]);
+        setTotalTasks(0);
+      } finally {
+        setInitialLoading(false);
+      }
     }
     fetchData();
-  }, [projectId, limit, offset]);
+  }, [projectId, limit, offset, q]);
 
   const { items: displayedTasks } = useInfiniteScroll<Task>(
     tasks ?? [],
@@ -67,7 +81,7 @@ const TasksListView = ({
     currentPage,
     limit,
     async (l, o) => {
-      const res = await getAllTasksApi(projectId, l, o);
+      const res = await getAllTasksApi(projectId, l, o, q || undefined);
       if (!res) return null;
       return { items: res.tasks, total: res.total };
     },
@@ -77,10 +91,28 @@ const TasksListView = ({
     return <TasksListSkeleton />;
   }
 
+  if (hasError) {
+    return (
+      <div className="hidden sm:block text-center py-20">
+        <p className="text-error body-md font-semibold">
+          Failed to search tasks
+        </p>
+      </div>
+    );
+  }
+
   if (totalTasks === 0) {
     return (
       <div className="hidden sm:block">
-        <EmptyTasks projectId={projectId} />
+        {q ? (
+          <div className="text-center py-20">
+            <p className="body-md text-slate-2">
+              No tasks found matching your search
+            </p>
+          </div>
+        ) : (
+          <EmptyTasks projectId={projectId} />
+        )}
       </div>
     );
   }
