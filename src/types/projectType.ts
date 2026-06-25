@@ -17,6 +17,7 @@ export interface ProjectEpicsListProps {
   total: number;
   currentPage: number;
   limit: number;
+  hasError?: boolean;
 }
 export interface MemberMetadata {
   name: string;
