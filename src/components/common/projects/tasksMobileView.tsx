@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import TaskDetailsMobile from "./taskDetailsMobile";
 import InfiniteScrollLoader from "../../ui/infiniteScrollLoader";
 import TasksMobileSkeleton from "./tasksMobileSkeleton";
+import TaskMobileCard from "../../ui/taskMobileCard";
 import EmptyTasks from "./emptyTasks";
 
 // types
@@ -17,7 +18,6 @@ import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
 
 // hooks
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
-import TaskMobileCard from "../../ui/taskMobileCard";
 
 const TasksMobileView = ({
   projectId,
@@ -156,7 +156,7 @@ const TasksMobileView = ({
       {loadMoreError && (
         <div className="flex flex-col items-center gap-2 py-4 w-full">
           <p className="text-error body-sm font-semibold">
-            Failed to search tasks
+            Failed to load more tasks
           </p>
           <button
             onClick={() => {

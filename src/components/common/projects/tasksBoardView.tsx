@@ -224,7 +224,7 @@ const TasksBoardView = ({
       {loadMoreError && (
         <div className="flex flex-col items-center gap-2 py-4">
           <p className="text-error body-sm font-semibold">
-            Failed to search tasks
+            Failed to load more tasks
           </p>
           <button
             onClick={() => {
