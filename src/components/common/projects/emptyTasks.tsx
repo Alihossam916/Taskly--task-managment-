@@ -1,6 +1,14 @@
 import Link from "next/link";
 
-const EmptyTasks = ({ projectId }: { projectId: string }) => {
+const EmptyTasks = ({
+  projectId,
+  title = "No tasks found for this project",
+  description = "Get started by creating your first task",
+}: {
+  projectId: string;
+  title?: string;
+  description?: string;
+}) => {
   return (
     <div className="flex flex-col items-center justify-center gap-6 py-20 mt-10">
       <div className="size-16 bg-surface-low rounded-full flex items-center justify-center">
@@ -21,9 +29,9 @@ const EmptyTasks = ({ projectId }: { projectId: string }) => {
         </svg>
       </div>
       <div className="text-center">
-        <h3 className="headline-lg text-slate-3 mb-2">Task not found</h3>
+        <h3 className="headline-lg text-slate-3 mb-2">{title}</h3>
         <p className="body-md text-slate-2">
-          Get started by creating your first task
+          {description}
         </p>
       </div>
       <Link
