@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { useState, useEffect, useTransition } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
 // components
 import BreadCrumb from "@/src/components/ui/breadCrumb";
@@ -23,6 +25,44 @@ const TasksHeader = ({
   projectId: string;
   view: string | undefined;
 }) => {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const q = searchParams.get("q") || "";
+  const [searchInput, setSearchInput] = useState(q);
+  const [debouncedSearch, setDebouncedSearch] = useState(q);
+  const [, startTransition] = useTransition();
+
+  const [prevQ, setPrevQ] = useState(q);
+  if (q !== prevQ) {
+    setPrevQ(q);
+    setSearchInput(q);
+    setDebouncedSearch(q);
+  }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchInput);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+  useEffect(() => {
+    if (debouncedSearch !== q) {
+      startTransition(() => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (debouncedSearch.trim()) {
+          params.set("q", debouncedSearch.trim());
+        } else {
+          params.delete("q");
+        }
+        // Reset page to 1
+        params.set("page", "1");
+        router.push(`/project/${projectId}/tasks?${params.toString()}`);
+      });
+    }
+  }, [debouncedSearch, q, projectId, router, searchParams]);
+
   return (
     <>
       <BreadCrumb
@@ -45,6 +85,8 @@ const TasksHeader = ({
             <Input
               type="search"
               placeholder="Search tasks..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               className="rounded-xs pl-10 placeholder:text-[#6B7280] text-black"
             />
           </div>
