@@ -173,7 +173,7 @@ const TaskDetailsModal = () => {
                   </div>
                 </div>
               </div>
-              <div>
+              <div className="space-y-4">
                 <h5 className="label-sm text-slate-2 text-sm uppercase">
                   reporter
                 </h5>
