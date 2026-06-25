@@ -49,7 +49,9 @@ const TaskMobileCard = ({ task, assignee, projectId }: TaskMobileCardProp) => {
           </span>
           <div>
             <p className="uppercase label-sm text-slate-2/70">due date</p>
-            <p>{formatDate(task.due_date)}</p>
+            <p className="uppercase label-sm text-slate-3">
+              {formatDate(task.due_date) || "No due date"}
+            </p>
           </div>
         </div>
         <EditIcon className="text-slate-2/70 p-2 size-8" />
