@@ -6,14 +6,21 @@ export async function getAllTasksApi(
   projectId: string,
   limit: number,
   offset: number,
+  searchTerm?: string,
 ): Promise<{ tasks: Task[]; total: number } | null> {
   try {
+    const params: Record<string, string> = {
+      project_id: `eq.${projectId}`,
+      limit: String(limit),
+      offset: String(offset),
+    };
+
+    if (searchTerm && searchTerm.trim().length > 0) {
+      params.title = `ilike.%${searchTerm}%`;
+    }
+
     const response = await apiClient("/rest/v1/project_tasks", {
-      params: {
-        project_id: `eq.${projectId}`,
-        limit: String(limit),
-        offset: String(offset),
-      },
+      params,
       headers: {
         Prefer: "count=exact",
       },

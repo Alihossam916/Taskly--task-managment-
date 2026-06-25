@@ -1,30 +1,31 @@
 "use server";
-import { getAccessToken } from "../../utils/cookies";
+import { apiClient } from "../client";
 import { Epic } from "@/src/types/projectType";
-
-const baseUrl = process.env.SUPABASE_URL!;
-const anonKey = process.env.SUPABASE_ANON_KEY!;
 
 export async function getProjectEpics(
   projectId: string,
   limit: number,
   offset: number,
+  searchTerm?: string,
 ): Promise<{ epics: Epic[]; total: number } | null> {
-  const token = await getAccessToken();
-
   try {
-    const response = await fetch(
-      `${baseUrl}/rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          apikey: anonKey,
-          "Content-Type": "application/json",
-          Prefer: "count=exact",
-        },
+    const params: Record<string, string> = {
+      project_id: `eq.${projectId}`,
+      limit: String(limit),
+      offset: String(offset),
+    };
+
+    if (searchTerm && searchTerm.trim().length > 0) {
+      params.title = `ilike.%${searchTerm}%`;
+    }
+
+    const response = await apiClient("/rest/v1/project_epics", {
+      params,
+      headers: {
+        Prefer: "count=exact",
       },
-    );
+    });
+
     if (response.ok) {
       const epics = await response.json();
       const total =
