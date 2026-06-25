@@ -19,6 +19,9 @@ const ViewSelector = () => {
     if (!option) return;
     const params = new URLSearchParams(searchParams.toString());
     params.set("view", option.value);
+    if (option.value === "board") {
+      params.delete("page"); // ← reset to page 1
+    }
     router.push(`?${params.toString()}`);
   }
 
