@@ -13,8 +13,8 @@ export async function apiClient(
 
   const url = new URL(`${baseUrl}${path}`);
   if (options?.params) {
-    Object.entries(options.params).forEach(([k, v]) =>
-      url.searchParams.set(k, v),
+    Object.entries(options.params).forEach(([key, value]) =>
+      url.searchParams.set(key, value),
     );
   }
 
