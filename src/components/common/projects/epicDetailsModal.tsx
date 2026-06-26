@@ -197,56 +197,20 @@ const EpicDetailsModal = ({
               {/* assignee */}
               <div className="space-y-3">
                 <p className="label-sm text-slate-1 uppercase">Assignee</p>
-                {!editMode.assignee ? (
-                  <div
-                    onClick={() => {
-                      setEditMode((prev) => ({ ...prev, assignee: true }));
-                    }}
-                    className="flex items-center gap-3 cursor-pointer"
-                  >
-                    <div className="size-10 rounded-full bg-primary-container/20 text-primary flex items-center justify-center font-bold">
-                      {assigneeInitials || (
-                        <UnassignedIcon className="size-4" />
-                      )}
-                    </div>
-                    <div>
-                      <h5 className="text-slate-3 body-md leading-none">
-                        {epic?.assignee?.name || "Unassigned"}
-                      </h5>
-                    </div>
-                  </div>
-                ) : (
                   <EpicAssigneeSelect
                     onSubmit={onSubmit}
                     isLoading={isLoading}
                     projectId={projectId}
                   />
-                )}
               </div>
 
               {/* deadline */}
-              <div className="space-y-3 sm:space-y-5">
+              <div className="space-y-3">
                 <p className="label-sm text-slate-1 uppercase">Deadline</p>
-                {!editMode.deadline ? (
-                  <div
-                    onClick={() => {
-                      setEditMode((prev) => ({ ...prev, deadline: true }));
-                    }}
-                    className="flex items-center gap-3 text-slate-3 cursor-pointer"
-                  >
-                    <DateIcon className="size-5" />
-                    <span className="body-md font-medium">
-                      {epic?.deadline
-                        ? formatDate(epic.deadline)
-                        : "No deadline set"}
-                    </span>
-                  </div>
-                ) : (
                   <EpicDeadlineInput
                     onSubmit={onSubmit}
                     isLoading={isLoading}
                   />
-                )}
               </div>
 
               {/* created at */}
