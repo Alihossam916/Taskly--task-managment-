@@ -119,9 +119,10 @@ const Sidebar = ({
 
             <ul className="space-y-2 mt-5">
               {allVisibleLinks.map((link) => {
+                const hrefPath = link.href.split("?")[0];
                 const isActive =
-                  pathname === link.href ||
-                  (link.href !== "/project" && pathname.startsWith(link.href));
+                  pathname === hrefPath ||
+                  (hrefPath !== "/project" && pathname.startsWith(hrefPath));
                 return (
                   <Link
                     key={link.name}
@@ -179,11 +180,7 @@ const Sidebar = ({
       </aside>
       <main
         className={`transition-all duration-300 p-4 bg-background min-w-0 ${
-          screenWidth < mobileView
-            ? "ml-0"
-            : extended
-              ? "ml-64"
-              : "ml-20"
+          screenWidth < mobileView ? "ml-0" : extended ? "ml-64" : "ml-20"
         }`}
       >
         {children}
