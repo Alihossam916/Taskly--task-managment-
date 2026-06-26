@@ -7,6 +7,7 @@ export async function getAllTasksApi(
   limit: number,
   offset: number,
   searchTerm?: string,
+  status?: string,
 ): Promise<{ tasks: Task[]; total: number } | null> {
   try {
     const params: Record<string, string> = {
@@ -14,6 +15,11 @@ export async function getAllTasksApi(
       limit: String(limit),
       offset: String(offset),
     };
+
+    // load tasks by status
+    if (status) {
+      params.status = `eq.${status}`;
+    }
 
     if (searchTerm && searchTerm.trim().length > 0) {
       params.title = `ilike.%${searchTerm}%`;

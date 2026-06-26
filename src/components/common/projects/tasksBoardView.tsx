@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 
 // components
@@ -20,33 +20,32 @@ import { updateTaskStatusApi } from "@/src/lib/api/projects/updateTaskStatus";
 // notifications
 import { toast } from "react-toastify";
 
-// hooks
-import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
-
 // types
 import { Task, Member } from "@/src/types/projectType";
 
 // constants
 import { statuses } from "@/src/constants/taskStatuses";
 
+type TasksByStatus = Record<string, Task[]>;
+
+const INITIAL_PAGE = 1;
+
 const TasksBoardView = ({
   projectId,
-  currentPage,
   limit,
-  offset,
 }: {
   projectId: string;
-  currentPage: number;
   limit: number;
-  offset: number;
 }) => {
-  const [tasks, setTasks] = useState<Task[] | null>([]);
+  const [tasksByStatus, setTasksByStatus] = useState<TasksByStatus>({});
   const [members, setMembers] = useState<Member[]>([]);
-  const [totalTasks, setTotalTasks] = useState(0);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [retryTrigger, setRetryTrigger] = useState(0);
   const [loadMoreError, setLoadMoreError] = useState(false);
+  const [page, setPage] = useState(INITIAL_PAGE);
+  const [hasMore, setHasMore] = useState(true);
 
   const searchParams = useSearchParams();
   const q = searchParams.get("q") || "";
@@ -56,63 +55,82 @@ const TasksBoardView = ({
       setInitialLoading(true);
       setHasError(false);
       try {
-        const [tasksData, membersData] = await Promise.all([
-          getAllTasksApi(projectId, limit, offset, q || undefined),
+        const [membersData, ...statusResults] = await Promise.all([
           getProjectMembers(projectId),
+          ...statuses.map((s) =>
+            getAllTasksApi(projectId, limit, 0, q || undefined, s),
+          ),
         ]);
-        if (!tasksData) {
-          setHasError(true);
-          setTasks([]);
-          setTotalTasks(0);
-        } else {
-          setTasks(tasksData.tasks || null);
-          setTotalTasks(tasksData.total);
-        }
+
         setMembers(membersData ?? []);
+
+        const grouped: TasksByStatus = {};
+        let anyFailed = false;
+
+        statuses.forEach((s, i) => {
+          const result = statusResults[i];
+          if (!result) {
+            anyFailed = true;
+            grouped[s] = [];
+          } else {
+            grouped[s] = result.tasks;
+          }
+        });
+
+        if (anyFailed) {
+          setHasError(true);
+        }
+
+        setTasksByStatus(grouped);
+        setPage(INITIAL_PAGE);
+        setHasMore(true);
       } catch {
         setHasError(true);
-        setTasks([]);
-        setTotalTasks(0);
       } finally {
         setInitialLoading(false);
       }
     }
     fetchData();
-  }, [projectId, limit, offset, q, retryTrigger]);
+  }, [projectId, limit, q, retryTrigger]);
 
-  const {
-    items: displayedTasks,
-    loading,
-    hasMore,
-    loadMore,
-  } = useInfiniteScroll<Task>(
-    tasks ?? [],
-    totalTasks,
-    currentPage,
-    limit,
-    async (l, o) => {
-      const res = await getAllTasksApi(projectId, l, o, q || undefined);
-      if (!res) {
-        setLoadMoreError(true);
-        return null;
-      }
-      setLoadMoreError(false);
-      return { items: res.tasks, total: res.total };
-    },
-  );
+  const loadMore = useCallback(async () => {
+    if (loadingMore || !hasMore) return;
+    setLoadingMore(true);
+    setLoadMoreError(false);
+    try {
+      const nextPage = page + 1;
+      const offset = (nextPage - 1) * limit;
 
-  const tasksByStatus = useMemo(() => {
-    const grouped: Record<string, Task[]> = {};
-    statuses.forEach((s) => {
-      grouped[s] = [];
-    });
-    displayedTasks.forEach((task) => {
-      if (grouped[task.status]) grouped[task.status].push(task);
-    });
-    return grouped;
-  }, [displayedTasks]);
+      const results = await Promise.all(
+        statuses.map((s) =>
+          getAllTasksApi(projectId, limit, offset, q || undefined, s),
+        ),
+      );
 
-  const hasNoTasks = displayedTasks.length === 0 && !loading;
+      let allEmpty = true;
+      const updated: TasksByStatus = { ...tasksByStatus };
+
+      statuses.forEach((s, i) => {
+        const result = results[i];
+        if (result && result.tasks.length > 0) {
+          allEmpty = false;
+          updated[s] = [...(updated[s] || []), ...result.tasks];
+        }
+      });
+
+      setTasksByStatus(updated);
+      setPage(nextPage);
+      setHasMore(!allEmpty);
+    } catch {
+      setLoadMoreError(true);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [loadingMore, hasMore, page, limit, projectId, q, tasksByStatus]);
+
+  const allTasks = Object.values(tasksByStatus).flat();
+  const totalCount = allTasks.length;
+  const hasNoTasks = totalCount === 0 && !loadingMore && !initialLoading;
 
   const onDragEnd = async (result: DropResult) => {
     const { source, destination, draggableId } = result;
@@ -123,26 +141,39 @@ const TasksBoardView = ({
     )
       return;
 
-    const draggedTask = displayedTasks.find((t) => t.task_id === draggableId);
+    const sourceStatus = source.droppableId;
+    const destStatus = destination.droppableId;
+    const draggedTask = tasksByStatus[sourceStatus]?.find(
+      (t) => t.task_id === draggableId,
+    );
     if (!draggedTask) return;
 
     const originalStatus = draggedTask.status;
-    const newStatus = destination.droppableId;
 
-    setTasks((prev) => {
-      if (!prev) return prev;
-      return prev.map((t) =>
-        t.task_id === draggableId ? { ...t, status: newStatus } : t,
+    setTasksByStatus((prev) => {
+      const updated = { ...prev };
+      updated[sourceStatus] = (prev[sourceStatus] || []).filter(
+        (t) => t.task_id !== draggableId,
       );
+      updated[destStatus] = [
+        ...(prev[destStatus] || []),
+        { ...draggedTask, status: destStatus },
+      ];
+      return updated;
     });
 
-    const res = await updateTaskStatusApi(draggedTask.id, newStatus);
+    const res = await updateTaskStatusApi(draggedTask.id, destStatus);
     if (!res) {
-      setTasks((prev) => {
-        if (!prev) return prev;
-        return prev.map((t) =>
-          t.task_id === draggableId ? { ...t, status: originalStatus } : t,
+      setTasksByStatus((prev) => {
+        const updated = { ...prev };
+        updated[destStatus] = (prev[destStatus] || []).filter(
+          (t) => t.task_id !== draggableId,
         );
+        updated[sourceStatus] = [
+          ...(prev[sourceStatus] || []),
+          { ...draggedTask, status: originalStatus },
+        ];
+        return updated;
       });
       toast.error("Failed to update task status");
     }
@@ -214,9 +245,9 @@ const TasksBoardView = ({
         </section>
       </DragDropContext>
       <InfiniteScrollLoader
-        loading={loading}
+        loading={loadingMore}
         hasMore={hasMore}
-        hasItems={displayedTasks.length > 0}
+        hasItems={allTasks.length > 0}
         onLoadMore={loadMore}
         label="tasks"
         mobileOnly={false}
