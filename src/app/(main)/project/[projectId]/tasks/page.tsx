@@ -25,7 +25,7 @@ const ProjectTasksPage = async ({ params, searchParams }: Props) => {
     <div className="mb-30 mt-5 max-w-full overflow-x-hidden">
       {/* page header */}
       <TasksHeader project={project} projectId={projectId} view={view} />
-      {view === "board" ? (
+      {view === "board" || view === undefined ? (
         <TasksBoardView
           projectId={projectId}
           currentPage={currentPage}
