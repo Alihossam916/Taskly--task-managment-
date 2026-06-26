@@ -64,11 +64,11 @@ const AddNewTask = ({ projectId }: { projectId: string }) => {
     setIsLoading(true);
     try {
       await addTaskApi(payload, project_id);
-      toast.success("Epic created successfully!");
+      toast.success("Task created successfully!");
       reset();
       router.push(`/project/${projectId}/epics`);
     } catch {
-      toast.error(`Failed to create epic: ${errors}`);
+      toast.error(`Failed to create task: ${errors}`);
     } finally {
       setIsLoading(false); // resets the loading state after response
     }
