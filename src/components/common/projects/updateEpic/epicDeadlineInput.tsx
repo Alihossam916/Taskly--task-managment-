@@ -23,12 +23,11 @@ interface EpicDeadlineProp {
 const EpicDeadlineInput = ({ onSubmit, isLoading }: EpicDeadlineProp) => {
   const {
     register,
-    setValue,
     handleSubmit,
-    formState: { errors, dirtyFields },
+    formState: { errors },
   } = useFormContext<AddEpicFormData>();
 
-  const { onChange: rhfOnChange, ...rest } = register("deadline");
+  const { onChange: rhfOnChange } = register("deadline");
 
   return (
     <>
@@ -47,7 +46,9 @@ const EpicDeadlineInput = ({ onSubmit, isLoading }: EpicDeadlineProp) => {
       {errors.deadline && (
         <div className="flex items-center gap-2">
           <ValidationErrorIcon />
-          <span className="text-red-600 text-sm">{errors.deadline?.message}</span>
+          <span className="text-red-600 text-sm">
+            {errors.deadline?.message}
+          </span>
         </div>
       )}
     </>
