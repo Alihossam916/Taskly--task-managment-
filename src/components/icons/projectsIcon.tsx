@@ -1,20 +1,19 @@
-import React from "react";
 import { ClassNameProp } from "@/src/types/propType";
 
 const ProjectsIcon = ({ className }: ClassNameProp) => {
   return (
     <svg
-      width="18"
-      height="18"
-      viewBox="0 0 18 18"
+      width="22"
+      height="16"
+      viewBox="0 0 22 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={`text-slate-3 hover:text-primary-container focus:text-primary-container active:text-primary-container transition-color duration-200 ${className}`}
     >
       <path
-        d="M0 8V0H8V8H0ZM0 18V10H8V18H0ZM10 8V0H18V8H10ZM10 18V10H18V18H10Z"
+        d="M2 16C1.45 16 0.979167 15.8042 0.5875 15.4125C0.195833 15.0208 0 14.55 0 14V2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0H8L10 2H18C18.55 2 19.0208 2.19583 19.4125 2.5875C19.8042 2.97917 20 3.45 20 4H9.175L7.175 2H2V14L4.4 6H21.5L18.925 14.575C18.7917 15.0083 18.5458 15.3542 18.1875 15.6125C17.8292 15.8708 17.4333 16 17 16H2ZM4.1 14H17L18.8 8H5.9L4.1 14ZM4.1 14L5.9 8L4.1 14ZM2 4V2V4Z"
         fill="currentColor"
-        fillOpacity={0.7}
+        fillOpacity="0.7"
       />
     </svg>
   );
