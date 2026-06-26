@@ -18,7 +18,7 @@ const ProjectTasksPage = async ({ params, searchParams }: Props) => {
   const project = await getProjectById(projectId);
 
   const currentPage = Number((await searchParams).page) || 1;
-  const limit = 5;
+  const limit = 3;
   const offset = (currentPage - 1) * limit;
 
   return (
@@ -28,9 +28,7 @@ const ProjectTasksPage = async ({ params, searchParams }: Props) => {
       {view === "board" || view === undefined ? (
         <TasksBoardView
           projectId={projectId}
-          currentPage={currentPage}
           limit={limit}
-          offset={offset}
         />
       ) : (
         <TasksListView
