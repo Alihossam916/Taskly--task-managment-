@@ -43,11 +43,7 @@ const EpicAssigneeSelect = ({
   isLoading,
   projectId,
 }: EpicDescriptionProp) => {
-  const {
-    handleSubmit,
-    control,
-    formState: { dirtyFields },
-  } = useFormContext<AddEpicFormData>();
+  const { handleSubmit, control } = useFormContext<AddEpicFormData>();
 
   const [members, setMembers] = useState<Member[]>([]);
   const selectInstanceId = useId();
@@ -116,6 +112,14 @@ const EpicAssigneeSelect = ({
               if (newValue !== currentValue) {
                 handleSubmit(onSubmit)();
               }
+            }}
+            styles={{
+              control: (base) => ({
+                ...base,
+                border: "none",
+                boxShadow: "none",
+                "&:hover": { border: "none" },
+              }),
             }}
             isClearable
             classNamePrefix="react-select"
