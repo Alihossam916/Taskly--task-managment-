@@ -7,12 +7,12 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ variant = "primary", className, ...props }, ref) => {
     const styles =
-      "w-full px-4 py-4 sm:py-3 font-medium rounded-xl sm:rounded-sm transition-all outline-none";
+      "w-full font-medium rounded-xl sm:rounded-sm transition-all outline-none";
     const variants = {
       primary:
-        "bg-[#D7E2FF] text-black focus:ring-2 focus:ring-primary-container",
-      secondary: "bg-none text-slate-3 focus:border-b border-slate-2",
-      error: "bg-[#FFDAD6] text-[#93000A] focus:ring-2 focus:ring-error",
+        "bg-[#D7E2FF] text-black focus:ring-2 focus:ring-primary-container px-4 py-4 sm:py-3",
+      secondary: "bg-none text-slate-3 focus:border-b border-slate-2 px-4 py-4 sm:py-1.5",
+      error: "bg-[#FFDAD6] text-[#93000A] focus:ring-2 focus:ring-error px-4 py-4 sm:py-3",
     };
 
     return (
