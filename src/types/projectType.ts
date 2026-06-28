@@ -56,6 +56,12 @@ export interface CreatedByTask {
   department: string | null;
   id: string;
 }
+export interface AssigneeTask {
+  name: string;
+  email: string;
+  department: string | null;
+  id: string;
+}
 export interface Task {
   id: string;
   task_id: string;
@@ -66,7 +72,7 @@ export interface Task {
   due_date?: string;
   created_at: string;
   created_by: CreatedByTask;
-  assignee?: { id: string };
+  assignee?: AssigneeTask;
   status: string;
 }
 
