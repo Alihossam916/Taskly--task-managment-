@@ -6,15 +6,15 @@ import { useSearchParams, useRouter } from "next/navigation";
 
 // components
 import BreadCrumb from "@/src/components/ui/breadCrumb";
-import Button from "@/src/components/ui/button";
 import Input from "@/src/components/ui/input";
 
 // icons
 import SearchIcon from "@/src/components/icons/searchIcon";
-import FilterIcon from "@/src/components/icons/filterIcon";
 import { Project } from "@/src/types/projectType";
 
-const ViewSelector = dynamic(() => import("../../ui/viewSelector"), { ssr: false });
+const ViewSelector = dynamic(() => import("../../ui/viewSelector"), {
+  ssr: false,
+});
 
 const TasksHeader = ({
   project,
@@ -91,11 +91,12 @@ const TasksHeader = ({
             />
           </div>
           <ViewSelector />
-          <Button
+          {/* filter button (for future development) */}
+          {/* <Button
             className={`bg-primary-container/30 ${view === `list` ? `hidden` : `hidden sm:block`}`}
           >
             <FilterIcon className="text-black" />
-          </Button>
+          </Button> */}
         </div>
         <Link
           href={`/project/${projectId}/tasks/new`}
