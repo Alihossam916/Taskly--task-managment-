@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Member, Task } from "@/src/types/projectType";
+import { Task } from "@/src/types/projectType";
 
 // icons
 import CircledPlus from "../../icons/circledPlus";
@@ -21,16 +21,10 @@ import { Draggable } from "@hello-pangea/dnd";
 interface StatusColumnProps {
   tasks: Task[];
   projectId: string;
-  members: Member[];
   status: string;
 }
 
-const StatusColumn = ({
-  tasks,
-  projectId,
-  members,
-  status,
-}: StatusColumnProps) => {
+const StatusColumn = ({ tasks, projectId, status }: StatusColumnProps) => {
   const dispatch = useDispatch();
 
   return (
@@ -61,11 +55,14 @@ const StatusColumn = ({
         <CircledPlus />
         <span className="uppercase">add new task</span>
       </Link>
-      <div className="flex flex-col gap-4 mt-4 w-full">
+      <div className="flex flex-col gap-4 mt-4 w-full h-96 overflow-auto">
         {tasks.map((task, index) => {
-          const assignee = members.find((m) => m.user_id === task.assignee?.id);
           return (
-            <Draggable key={task.task_id} draggableId={task.task_id} index={index}>
+            <Draggable
+              key={task.task_id}
+              draggableId={task.task_id}
+              index={index}
+            >
               {(provided) => (
                 <div
                   ref={provided.innerRef}
@@ -82,31 +79,31 @@ const StatusColumn = ({
                   }
                   className={`flex flex-col gap-4 rounded-lg p-6 w-full hover:shadow-md transition-shadow duration-200 cursor-pointer ${status === `IN_PROGRESS` ? `border-l-4 border-primary` : status === `BLOCKED` ? `bg-error/5 border border-error/20` : status === `DONE` ? `bg-success/10` : `bg-white`}`}
                 >
-              <h4 className="text-sm font-medium text-slate-3 mb-2">
-                {task.title.charAt(0).toUpperCase() + task.title.slice(1)}
-              </h4>
-              <div className="flex items-center justify-between">
-                {status === "BLOCKED" ? (
-                  <span className="flex items-center gap-2 label-sm text-error uppercase">
-                    <WarningIcon />
-                    Delayed
-                  </span>
-                ) : status === "DONE" ? (
-                  <span className="flex items-center gap-2 label-sm text-success uppercase">
-                    <CircleCheck className="text-green-500" />
-                    DONE
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-2 label-sm text-slate-2/60 uppercase">
-                    <DateIcon />
-                    {formatDate(task.due_date) || "no due date"}
-                  </span>
-                )}
-                <div className="bg-primary-container size-6 p-2 text-xs rounded-full text-white flex items-center justify-center font-bold">
-                  {getInitials(assignee?.metadata.name) || "UN"}
+                  <h4 className="text-sm font-medium text-slate-3 mb-2">
+                    {task.title.charAt(0).toUpperCase() + task.title.slice(1)}
+                  </h4>
+                  <div className="flex items-center justify-between">
+                    {status === "BLOCKED" ? (
+                      <span className="flex items-center gap-2 label-sm text-error uppercase">
+                        <WarningIcon />
+                        Delayed
+                      </span>
+                    ) : status === "DONE" ? (
+                      <span className="flex items-center gap-2 label-sm text-success uppercase">
+                        <CircleCheck className="text-green-500" />
+                        DONE
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2 label-sm text-slate-2/60 uppercase">
+                        <DateIcon />
+                        {formatDate(task.due_date) || "no due date"}
+                      </span>
+                    )}
+                    <div className="bg-primary-container size-6 p-2 text-xs rounded-full text-white flex items-center justify-center font-bold">
+                      {getInitials(task.assignee?.name) || "UN"}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
               )}
             </Draggable>
           );

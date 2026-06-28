@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeTaskDetails } from "@/src/lib/redux/feature/taskModalSlice";
 
 // types
-import { Epic, Member, Task } from "@/src/types/projectType";
+import { Epic, Task } from "@/src/types/projectType";
 
 // components
 import Badge from "../../ui/badge";
@@ -14,7 +14,6 @@ import TaskDetailsMobileSkeleton from "./taskDetailsMobileSkeleton";
 
 // libs
 import { getTaskDetails } from "@/src/lib/api/projects/getTaskDetails";
-import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
 import { getEpicDetails } from "@/src/lib/api/projects/getEpicDetails";
 
 // utils
@@ -28,7 +27,6 @@ const TaskDetailsMobile = () => {
     useSelector((state: any) => state.taskModal);
   const dispatch = useDispatch();
   const [taskDetails, setTaskDetails] = useState<Task | null>(null);
-  const [members, setMembers] = useState<Member[] | null>(null);
   const [epicDetails, setEpicDetails] = useState<Epic | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [translateY, setTranslateY] = useState(0);
@@ -39,12 +37,8 @@ const TaskDetailsMobile = () => {
     async function fetchData() {
       setIsLoading(true);
       try {
-        const [task, members] = await Promise.all([
-          getTaskDetails(selectedTaskId, selectedProjectId),
-          getProjectMembers(selectedProjectId),
-        ]);
+        const task = await getTaskDetails(selectedTaskId, selectedProjectId);
         setTaskDetails(task);
-        setMembers(members);
 
         if (taskEpicId) {
           const epic = await getEpicDetails(selectedProjectId, taskEpicId);
@@ -88,10 +82,6 @@ const TaskDetailsMobile = () => {
   };
 
   if (!taskDetailsOpen || !selectedTaskId) return null;
-
-  const taskAssignee = members?.find(
-    (member) => member.user_id === taskDetails?.assignee?.id,
-  );
 
   return (
     <div
@@ -186,10 +176,10 @@ const TaskDetailsMobile = () => {
                 <h4 className="uppercase label-sm text-slate-2">assignee</h4>
                 <div className="flex items-center gap-2">
                   <p className="size-8 p-2 bg-primary-container text-white flex items-center justify-center rounded-full font-bold">
-                    {getInitials(taskAssignee?.metadata.name) || "UN"}
+                    {getInitials(taskDetails?.assignee?.name) || "UN"}
                   </p>
                   <p className="body-md font-medium text-slate-3 capitalize">
-                    {taskAssignee?.metadata.name || "unassigned"}
+                    {taskDetails?.assignee?.name || "unassigned"}
                   </p>
                 </div>
               </div>

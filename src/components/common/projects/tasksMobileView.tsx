@@ -10,11 +10,10 @@ import TaskMobileCard from "../../ui/taskMobileCard";
 import EmptyTasks from "./emptyTasks";
 
 // types
-import { Member, Task, TaskViewProps } from "@/src/types/projectType";
+import { Task, TaskViewProps } from "@/src/types/projectType";
 
 // libs
 import { getAllTasksApi } from "@/src/lib/api/projects/getAllTasks";
-import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
 
 // hooks
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
@@ -26,7 +25,6 @@ const TasksMobileView = ({
   offset,
 }: TaskViewProps) => {
   const [tasks, setTasks] = useState<Task[] | null>([]);
-  const [members, setMembers] = useState<Member[]>([]);
   const [totalTasks, setTotalTasks] = useState<number>(0);
   const [initialLoading, setInitialLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -41,10 +39,12 @@ const TasksMobileView = ({
       setInitialLoading(true);
       setHasError(false);
       try {
-        const [tasksData, membersData] = await Promise.all([
-          getAllTasksApi(projectId, limit, offset, q || undefined),
-          getProjectMembers(projectId),
-        ]);
+        const tasksData = await getAllTasksApi(
+          projectId,
+          limit,
+          offset,
+          q || undefined,
+        );
         const { tasks, total } = tasksData || {
           tasks: [],
           total: 0,
@@ -58,7 +58,6 @@ const TasksMobileView = ({
           setTasks(tasks || null);
           setTotalTasks(total);
         }
-        setMembers(membersData ?? []);
       } catch {
         setHasError(true);
         setTasks([]);
@@ -134,15 +133,9 @@ const TasksMobileView = ({
   return (
     <div className="flex flex-col items-center gap-4 w-full sm:hidden mt-10">
       {displayedTasks?.map((task) => {
-        const assignee = members.find((m) => m.user_id === task.assignee?.id);
-
         return (
           <Fragment key={task.task_id}>
-            <TaskMobileCard
-              task={task}
-              assignee={assignee}
-              projectId={projectId}
-            />
+            <TaskMobileCard task={task} projectId={projectId} />
           </Fragment>
         );
       })}

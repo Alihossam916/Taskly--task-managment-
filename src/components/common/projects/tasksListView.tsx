@@ -140,7 +140,6 @@ const TasksListView = ({
                 <TaskListCard
                   task={task}
                   projectId={projectId}
-                  assignee={task.assignee}
                 />
               </Fragment>
             );

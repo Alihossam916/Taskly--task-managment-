@@ -14,14 +14,13 @@ import { DragDropContext, Droppable, DropResult } from "@hello-pangea/dnd";
 
 // libs
 import { getAllTasksApi } from "@/src/lib/api/projects/getAllTasks";
-import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
 import { updateTaskStatusApi } from "@/src/lib/api/projects/updateTaskStatus";
 
 // notifications
 import { toast } from "react-toastify";
 
 // types
-import { Task, Member } from "@/src/types/projectType";
+import { Task } from "@/src/types/projectType";
 
 // constants
 import { statuses } from "@/src/constants/taskStatuses";
@@ -38,7 +37,6 @@ const TasksBoardView = ({
   limit: number;
 }) => {
   const [tasksByStatus, setTasksByStatus] = useState<TasksByStatus>({});
-  const [members, setMembers] = useState<Member[]>([]);
   const [initialLoading, setInitialLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasError, setHasError] = useState(false);
@@ -55,14 +53,11 @@ const TasksBoardView = ({
       setInitialLoading(true);
       setHasError(false);
       try {
-        const [membersData, ...statusResults] = await Promise.all([
-          getProjectMembers(projectId),
-          ...statuses.map((s) =>
+        const statusResults = await Promise.all(
+          statuses.map((s) =>
             getAllTasksApi(projectId, limit, 0, q || undefined, s),
           ),
-        ]);
-
-        setMembers(membersData ?? []);
+        );
 
         const grouped: TasksByStatus = {};
         let anyFailed = false;
@@ -233,7 +228,6 @@ const TasksBoardView = ({
                       status={status}
                       tasks={tasks}
                       projectId={projectId}
-                      members={members}
                     />
                     {provided.placeholder}
                   </div>

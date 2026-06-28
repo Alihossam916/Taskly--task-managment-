@@ -8,15 +8,14 @@ import EditIcon from "../icons/editIcon";
 // redux
 import { useDispatch } from "react-redux";
 import { openTaskDetails } from "@/src/lib/redux/feature/taskModalSlice";
-import { Member, Task } from "@/src/types/projectType";
+import { Task } from "@/src/types/projectType";
 
 interface TaskMobileCardProp {
   task: Task;
-  assignee?: Member;
   projectId: string;
 }
 
-const TaskMobileCard = ({ task, assignee, projectId }: TaskMobileCardProp) => {
+const TaskMobileCard = ({ task, projectId }: TaskMobileCardProp) => {
   const dispatch = useDispatch();
 
   return (
@@ -45,7 +44,7 @@ const TaskMobileCard = ({ task, assignee, projectId }: TaskMobileCardProp) => {
         <div className="flex items-center gap-2">
           <span className="bg-primary-container text-white size-9 p-2 flex justify-center items-center rounded-full">
             {" "}
-            {getInitials(assignee?.metadata.name) || "UN"}
+            {getInitials(task.assignee?.name) || "UN"}
           </span>
           <div>
             <p className="uppercase label-sm text-slate-2/70">due date</p>

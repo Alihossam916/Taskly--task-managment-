@@ -13,11 +13,10 @@ import EditIcon from "../../icons/editIcon";
 import DateIcon from "../../icons/dateIcon";
 
 // types
-import { Epic, Task, Member } from "@/src/types/projectType";
+import { Epic, Task } from "@/src/types/projectType";
 import { getTasksByEpicApi } from "@/src/lib/api/projects/getTasksByEpic";
 
 // libs
-import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
 
 // redux
 import { useDispatch } from "react-redux";
@@ -36,7 +35,6 @@ interface TaskListProp {
 
 const TaskList = ({ projectId, epic, onClose }: TaskListProp) => {
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [members, setMembers] = useState<Member[]>([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -49,13 +47,8 @@ const TaskList = ({ projectId, epic, onClose }: TaskListProp) => {
       }
       setTasks(response ?? []);
     }
-    async function fetchMembers() {
-      const response = await getProjectMembers(projectId);
-      setMembers(response ?? []);
-    }
 
     fetchTasksByEpic();
-    fetchMembers();
   }, [epic, projectId]);
 
   return (
@@ -78,9 +71,6 @@ const TaskList = ({ projectId, epic, onClose }: TaskListProp) => {
           </div>
 
           {tasks.map((task) => {
-            const taskAssignee = members.find(
-              (member) => member.user_id === task.assignee?.id,
-            );
             return (
               <div
                 key={task.task_id}
@@ -103,10 +93,10 @@ const TaskList = ({ projectId, epic, onClose }: TaskListProp) => {
                     </h4>
                     <div className="flex items-center gap-2">
                       <div className="bg-primary-container w-fit p-2 rounded-full text-white">
-                        {getInitials(taskAssignee?.metadata.name)}
+                        {getInitials(task.assignee?.name)}
                       </div>
                       <p className="capitalize">
-                        {taskAssignee?.metadata.name || "unassigned"}
+                        {task.assignee?.name || "unassigned"}
                       </p>
                     </div>
                   </div>
