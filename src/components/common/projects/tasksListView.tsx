@@ -44,14 +44,9 @@ const TasksListView = ({
           offset,
           q || undefined,
         );
-        if (!tasksData) {
-          setHasError(true);
-          setTasks([]);
-          setTotalTasks(0);
-        } else {
-          setTasks(tasksData.tasks || null);
-          setTotalTasks(tasksData.total);
-        }
+        
+        setTasks(tasksData?.tasks || null);
+        setTotalTasks(tasksData?.total || 0);
       } catch {
         setHasError(true);
         setTasks([]);
@@ -137,10 +132,7 @@ const TasksListView = ({
           {displayedTasks?.map((task) => {
             return (
               <Fragment key={task.task_id}>
-                <TaskListCard
-                  task={task}
-                  projectId={projectId}
-                />
+                <TaskListCard task={task} projectId={projectId} />
               </Fragment>
             );
           })}

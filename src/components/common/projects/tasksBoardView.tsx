@@ -60,21 +60,11 @@ const TasksBoardView = ({
         );
 
         const grouped: TasksByStatus = {};
-        let anyFailed = false;
 
         statuses.forEach((s, i) => {
           const result = statusResults[i];
-          if (!result) {
-            anyFailed = true;
-            grouped[s] = [];
-          } else {
-            grouped[s] = result.tasks;
-          }
+          grouped[s] = result?.tasks || [];
         });
-
-        if (anyFailed) {
-          setHasError(true);
-        }
 
         setTasksByStatus(grouped);
         setPage(INITIAL_PAGE);

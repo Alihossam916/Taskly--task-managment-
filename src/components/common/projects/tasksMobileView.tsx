@@ -50,14 +50,8 @@ const TasksMobileView = ({
           total: 0,
         };
 
-        if (!tasksData) {
-          setHasError(true);
-          setTasks([]);
-          setTotalTasks(0);
-        } else {
-          setTasks(tasks || null);
-          setTotalTasks(total);
-        }
+        setTasks(tasks || null);
+        setTotalTasks(total);
       } catch {
         setHasError(true);
         setTasks([]);
