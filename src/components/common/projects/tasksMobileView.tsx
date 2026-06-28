@@ -73,8 +73,13 @@ const TasksMobileView = ({
     totalTasks,
     currentPage,
     limit,
-    async (l, o) => {
-      const res = await getAllTasksApi(projectId, l, o, q || undefined);
+    async (limit, offset) => {
+      const res = await getAllTasksApi(
+        projectId,
+        limit,
+        offset,
+        q || undefined,
+      );
       if (!res) {
         setLoadMoreError(true);
         return null;
