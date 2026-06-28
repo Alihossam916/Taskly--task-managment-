@@ -8,17 +8,16 @@ import TaskDetailsModal from "./taskDetailsModal";
 import Pagination from "../../ui/pagination";
 import EmptyTasks from "./emptyTasks";
 import TasksListSkeleton from "./tasksListSkeleton";
+import TaskListCard from "../../ui/taskListCard";
 
 // libs
 import { getAllTasksApi } from "@/src/lib/api/projects/getAllTasks";
-import { getProjectMembers } from "@/src/lib/api/projects/getProjectMembers";
 
 // types
-import { Task, Member, TaskViewProps } from "@/src/types/projectType";
+import { Task, TaskViewProps } from "@/src/types/projectType";
 
 // hooks
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
-import TaskListCard from "../../ui/taskListCard";
 
 const TasksListView = ({
   projectId,
@@ -27,7 +26,6 @@ const TasksListView = ({
   offset,
 }: TaskViewProps) => {
   const [tasks, setTasks] = useState<Task[] | null>([]);
-  const [members, setMembers] = useState<Member[]>([]);
   const [totalTasks, setTotalTasks] = useState<number>(0);
   const [initialLoading, setInitialLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -40,10 +38,12 @@ const TasksListView = ({
       setInitialLoading(true);
       setHasError(false);
       try {
-        const [tasksData, membersData] = await Promise.all([
-          getAllTasksApi(projectId, limit, offset, q || undefined),
-          getProjectMembers(projectId),
-        ]);
+        const tasksData = await getAllTasksApi(
+          projectId,
+          limit,
+          offset,
+          q || undefined,
+        );
         if (!tasksData) {
           setHasError(true);
           setTasks([]);
@@ -52,7 +52,6 @@ const TasksListView = ({
           setTasks(tasksData.tasks || null);
           setTotalTasks(tasksData.total);
         }
-        setMembers(membersData ?? []);
       } catch {
         setHasError(true);
         setTasks([]);
@@ -69,8 +68,13 @@ const TasksListView = ({
     totalTasks,
     currentPage,
     limit,
-    async (l, o) => {
-      const res = await getAllTasksApi(projectId, l, o, q || undefined);
+    async (limit, offset) => {
+      const res = await getAllTasksApi(
+        projectId,
+        limit,
+        offset,
+        q || undefined,
+      );
       if (!res) return null;
       return { items: res.tasks, total: res.total };
     },
@@ -131,15 +135,12 @@ const TasksListView = ({
         </thead>
         <tbody className="bg-white">
           {displayedTasks?.map((task) => {
-            const assignee = members.find(
-              (m) => m.user_id === task.assignee?.id,
-            );
             return (
               <Fragment key={task.task_id}>
                 <TaskListCard
                   task={task}
                   projectId={projectId}
-                  assignee={assignee}
+                  assignee={task.assignee}
                 />
               </Fragment>
             );

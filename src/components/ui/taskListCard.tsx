@@ -1,5 +1,5 @@
 // types
-import { Member, Task } from "@/src/types/projectType";
+import { AssigneeTask, Task } from "@/src/types/projectType";
 
 // utils
 import { getInitials } from "@/src/lib/utils/initials";
@@ -15,7 +15,7 @@ import { openTaskDetails } from "@/src/lib/redux/feature/taskModalSlice";
 interface TaskListCardProp {
   task: Task;
   projectId: string;
-  assignee?: Member;
+  assignee?: AssigneeTask;
 }
 const TaskListCard = ({ task, projectId, assignee }: TaskListCardProp) => {
   const dispatch = useDispatch();
@@ -53,10 +53,10 @@ const TaskListCard = ({ task, projectId, assignee }: TaskListCardProp) => {
       </td>
       <td className="py-4 pr-10 text-right flex gap-2 items-center">
         <span className="bg-primary-container p-2 rounded-full text-white">
-          {getInitials(assignee?.metadata.name) || "UN"}
+          {getInitials(assignee?.name) || "UN"}
         </span>
         <span className="body-md text-slate-2">
-          {assignee?.metadata?.name || "Unassigned"}
+          {assignee?.name || "Unassigned"}
         </span>
       </td>
       <td className="py-4 text-left">
