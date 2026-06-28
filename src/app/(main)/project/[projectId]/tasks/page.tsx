@@ -18,7 +18,7 @@ const ProjectTasksPage = async ({ params, searchParams }: Props) => {
   const project = await getProjectById(projectId);
 
   const currentPage = Number((await searchParams).page) || 1;
-  const limit = 3;
+  const limit = 4;
   const offset = (currentPage - 1) * limit;
 
   return (
