@@ -1,4 +1,7 @@
+"use client";
 import Link from "next/link";
+
+// types
 import { Task } from "@/src/types/projectType";
 
 // icons
@@ -6,6 +9,9 @@ import CircledPlus from "../../icons/circledPlus";
 import CircleCheck from "../../icons/circleCheck";
 import DateIcon from "../../icons/dateIcon";
 import WarningIcon from "../../icons/warningIcon";
+
+// components
+import InfiniteScrollLoader from "../../ui/infiniteScrollLoader";
 
 // utils
 import { formatDate } from "@/src/lib/utils/formatDate";
@@ -22,9 +28,23 @@ interface StatusColumnProps {
   tasks: Task[];
   projectId: string;
   status: string;
+  loading: boolean;
+  hasMore: boolean;
+  loadMoreError: boolean;
+  onLoadMore: () => void;
+  onRetry: () => void;
 }
 
-const StatusColumn = ({ tasks, projectId, status }: StatusColumnProps) => {
+const StatusColumn = ({
+  tasks,
+  projectId,
+  status,
+  loading,
+  hasMore,
+  loadMoreError,
+  onLoadMore,
+  onRetry,
+}: StatusColumnProps) => {
   const dispatch = useDispatch();
 
   return (
@@ -108,6 +128,27 @@ const StatusColumn = ({ tasks, projectId, status }: StatusColumnProps) => {
             </Draggable>
           );
         })}
+        <InfiniteScrollLoader
+          loading={loading}
+          hasMore={hasMore}
+          hasItems={tasks.length > 0}
+          onLoadMore={onLoadMore}
+          label="tasks"
+          mobileOnly={false}
+        />
+        {loadMoreError && (
+          <div className="flex flex-col items-center gap-2 py-4">
+            <p className="text-error body-sm font-semibold">
+              Failed to load more tasks
+            </p>
+            <button
+              onClick={onRetry}
+              className="rounded-xs! text-sm py-2 px-4 bg-primary text-white hover:opacity-90 transition-opacity"
+            >
+              Retry
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

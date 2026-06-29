@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 // components
 import TaskDetailsModal from "./taskDetailsModal";
 import EmptyTasks from "./emptyTasks";
-import InfiniteScrollLoader from "../../ui/infiniteScrollLoader";
 import TasksBoardSkeleton from "./tasksBoardSkeleton";
 import StatusColumn from "./statusColumn";
 
@@ -38,12 +37,16 @@ const TasksBoardView = ({
 }) => {
   const [tasksByStatus, setTasksByStatus] = useState<TasksByStatus>({});
   const [initialLoading, setInitialLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [retryTrigger, setRetryTrigger] = useState(0);
-  const [loadMoreError, setLoadMoreError] = useState(false);
-  const [page, setPage] = useState(INITIAL_PAGE);
-  const [hasMore, setHasMore] = useState(true);
+  const [pages, setPages] = useState<Record<string, number>>({});
+  const [hasMoreMap, setHasMoreMap] = useState<Record<string, boolean>>({});
+  const [loadingMoreMap, setLoadingMoreMap] = useState<Record<string, boolean>>(
+    {},
+  );
+  const [loadMoreErrorMap, setLoadMoreErrorMap] = useState<
+    Record<string, boolean>
+  >({});
 
   const searchParams = useSearchParams();
   const q = searchParams.get("q") || "";
@@ -60,15 +63,19 @@ const TasksBoardView = ({
         );
 
         const grouped: TasksByStatus = {};
+        const initialPages: Record<string, number> = {};
+        const initialHasMore: Record<string, boolean> = {};
 
         statuses.forEach((s, i) => {
           const result = statusResults[i];
           grouped[s] = result?.tasks || [];
+          initialPages[s] = INITIAL_PAGE;
+          initialHasMore[s] = true;
         });
 
         setTasksByStatus(grouped);
-        setPage(INITIAL_PAGE);
-        setHasMore(true);
+        setPages(initialPages);
+        setHasMoreMap(initialHasMore);
       } catch {
         setHasError(true);
       } finally {
@@ -78,44 +85,45 @@ const TasksBoardView = ({
     fetchData();
   }, [projectId, limit, q, retryTrigger]);
 
-  const loadMore = useCallback(async () => {
-    if (loadingMore || !hasMore) return;
-    setLoadingMore(true);
-    setLoadMoreError(false);
-    try {
-      const nextPage = page + 1;
-      const offset = (nextPage - 1) * limit;
+  const loadMoreForStatus = useCallback(
+    async (status: string) => {
+      if (loadingMoreMap[status] || !hasMoreMap[status]) return;
+      setLoadingMoreMap((prev) => ({ ...prev, [status]: true }));
+      setLoadMoreErrorMap((prev) => ({ ...prev, [status]: false }));
+      try {
+        const currentPage = pages[status] || 1;
+        const nextPage = currentPage + 1;
+        const offset = (nextPage - 1) * limit;
 
-      const results = await Promise.all(
-        statuses.map((s) =>
-          getAllTasksApi(projectId, limit, offset, q || undefined, s),
-        ),
-      );
+        const result = await getAllTasksApi(
+          projectId,
+          limit,
+          offset,
+          q || undefined,
+          status,
+        );
 
-      let allEmpty = true;
-      const updated: TasksByStatus = { ...tasksByStatus };
-
-      statuses.forEach((s, i) => {
-        const result = results[i];
-        if (result && result.tasks.length > 0) {
-          allEmpty = false;
-          updated[s] = [...(updated[s] || []), ...result.tasks];
-        }
-      });
-
-      setTasksByStatus(updated);
-      setPage(nextPage);
-      setHasMore(!allEmpty);
-    } catch {
-      setLoadMoreError(true);
-    } finally {
-      setLoadingMore(false);
-    }
-  }, [loadingMore, hasMore, page, limit, projectId, q, tasksByStatus]);
+        setTasksByStatus((prev) => ({
+          ...prev,
+          [status]: [...(prev[status] || []), ...(result?.tasks || [])],
+        }));
+        setPages((prev) => ({ ...prev, [status]: nextPage }));
+        setHasMoreMap((prev) => ({
+          ...prev,
+          [status]: (result?.tasks?.length || 0) > 0,
+        }));
+      } catch {
+        setLoadMoreErrorMap((prev) => ({ ...prev, [status]: true }));
+      } finally {
+        setLoadingMoreMap((prev) => ({ ...prev, [status]: false }));
+      }
+    },
+    [loadingMoreMap, hasMoreMap, pages, limit, projectId, q],
+  );
 
   const allTasks = Object.values(tasksByStatus).flat();
   const totalCount = allTasks.length;
-  const hasNoTasks = totalCount === 0 && !loadingMore && !initialLoading;
+  const hasNoTasks = totalCount === 0 && !initialLoading;
 
   const onDragEnd = async (result: DropResult) => {
     const { source, destination, draggableId } = result;
@@ -218,6 +226,11 @@ const TasksBoardView = ({
                       status={status}
                       tasks={tasks}
                       projectId={projectId}
+                      loading={loadingMoreMap[status] ?? false}
+                      hasMore={hasMoreMap[status] ?? true}
+                      loadMoreError={loadMoreErrorMap[status] ?? false}
+                      onLoadMore={() => loadMoreForStatus(status)}
+                      onRetry={() => loadMoreForStatus(status)}
                     />
                     {provided.placeholder}
                   </div>
@@ -228,30 +241,6 @@ const TasksBoardView = ({
           <TaskDetailsModal />
         </section>
       </DragDropContext>
-      <InfiniteScrollLoader
-        loading={loadingMore}
-        hasMore={hasMore}
-        hasItems={allTasks.length > 0}
-        onLoadMore={loadMore}
-        label="tasks"
-        mobileOnly={false}
-      />
-      {loadMoreError && (
-        <div className="flex flex-col items-center gap-2 py-4">
-          <p className="text-error body-sm font-semibold">
-            Failed to load more tasks
-          </p>
-          <button
-            onClick={() => {
-              setLoadMoreError(false);
-              loadMore();
-            }}
-            className="rounded-xs! text-sm py-2 px-4 bg-primary text-white hover:opacity-90 transition-opacity"
-          >
-            Retry
-          </button>
-        </div>
-      )}
     </div>
   );
 };
