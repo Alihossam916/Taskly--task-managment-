@@ -49,7 +49,7 @@ const InfiniteScrollLoader = ({
       ref={observerTarget}
       className={`flex justify-center py-8 h-20 ${mobileOnly ? "sm:hidden" : ""}`}
     >
-      {loading && <Spinner className="size-8!" />}
+      {loading && <Spinner className="border-slate-3" />}
       {!hasMore && hasItems && (
         <p className="text-slate-2 body-md italic">No more {label} to show</p>
       )}
