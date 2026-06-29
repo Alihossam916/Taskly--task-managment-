@@ -66,7 +66,7 @@ const AddNewTask = ({ projectId }: { projectId: string }) => {
       await addTaskApi(payload, project_id);
       toast.success("Task created successfully!");
       reset();
-      router.push(`/project/${projectId}/epics`);
+      router.push(`/project/${projectId}/tasks`);
     } catch {
       toast.error(`Failed to create task: ${errors}`);
     } finally {
