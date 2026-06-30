@@ -86,11 +86,7 @@ const InviteMemberMobile = ({ projectId }: { projectId: string }) => {
         email: data.email,
         project_id: projectId,
       });
-      if (response) {
-        toast.success("Invitation sent successfully");
-      } else {
-        toast.error("Failed to send invitation. Check the email or try again.");
-      }
+      toast.success("Invitation sent successfully");
     } catch {
       toast.error("Failed to send invitation. Check the email or try again.");
     } finally {

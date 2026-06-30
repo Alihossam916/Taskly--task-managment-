@@ -10,6 +10,13 @@ const Page = async ({
   searchParams: Promise<{ token: string }>;
 }) => {
   const { token } = await searchParams;
+  if (!token) {
+    return (
+      <div className="capitalize title-md flex justify-center items-center">
+        token not found
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col justify-center items-center gap-4 bg-surface-low h-screen">
       <h4 className="flex items-center gap-2">

@@ -7,6 +7,7 @@ interface InviteMembersProp {
 }
 
 const baseUrl = process.env.SUPABASE_URL!;
+const P_APP_URL = process.env.P_APP_URL!;
 
 export async function inviteMembersApi({
   email,
@@ -18,7 +19,7 @@ export async function inviteMembersApi({
       body: JSON.stringify({
         p_email: email,
         p_project_id: project_id,
-        p_app_url: "http://localhost:3000",
+        p_app_url: P_APP_URL,
         p_base_url: baseUrl,
       }),
     });
