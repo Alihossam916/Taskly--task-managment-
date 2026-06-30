@@ -1,0 +1,65 @@
+"use client";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+import { toast } from "react-toastify";
+
+// components
+import Button from "@/src/components/ui/button";
+import Spinner from "../../ui/spinner";
+
+// lib
+import { acceptInviteApi } from "@/src/lib/api/projects/acceptInvitation";
+
+const AcceptInvitation = ({ token }: { token: string }) => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleAcceptInvitation() {
+    setIsLoading(true);
+    try {
+      const response = await acceptInviteApi(token);
+      if (response) {
+        setIsLoading(false);
+        toast.success("Invite accepted successfully");
+        router.push(`/project`);
+      }
+    } catch {
+      toast.error("Invite failed please try again later");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  return (
+    <div className="bg-white p-12 rounded-lg border-t-4 border-t-primary flex flex-col items-center justify-center gap-4">
+      <h5 className="flex items-center gap-2 bg-surface-highest py-1 px-2 rounded-l-full rounded-r-full">
+        <svg
+          width="12"
+          height="10"
+          viewBox="0 0 12 10"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M5.25 7.58333H9.91667V7.2625C9.91667 6.825 9.70278 6.47743 9.275 6.21979C8.84722 5.96215 8.28333 5.83333 7.58333 5.83333C6.88333 5.83333 6.31944 5.96215 5.89167 6.21979C5.46389 6.47743 5.25 6.825 5.25 7.2625V7.58333ZM7.58333 5.25C7.90417 5.25 8.17882 5.13576 8.40729 4.90729C8.63576 4.67882 8.75 4.40417 8.75 4.08333C8.75 3.7625 8.63576 3.48785 8.40729 3.25938C8.17882 3.0309 7.90417 2.91667 7.58333 2.91667C7.2625 2.91667 6.98785 3.0309 6.75938 3.25938C6.5309 3.48785 6.41667 3.7625 6.41667 4.08333C6.41667 4.40417 6.5309 4.67882 6.75938 4.90729C6.98785 5.13576 7.2625 5.25 7.58333 5.25ZM1.16667 9.33333C0.845833 9.33333 0.571181 9.2191 0.342708 8.99063C0.114236 8.76215 0 8.4875 0 8.16667V1.16667C0 0.845833 0.114236 0.571181 0.342708 0.342708C0.571181 0.114236 0.845833 0 1.16667 0H4.66667L5.83333 1.16667H10.5C10.8208 1.16667 11.0955 1.2809 11.324 1.50937C11.5524 1.73785 11.6667 2.0125 11.6667 2.33333V8.16667C11.6667 8.4875 11.5524 8.76215 11.324 8.99063C11.0955 9.2191 10.8208 9.33333 10.5 9.33333H1.16667ZM1.16667 8.16667H10.5V2.33333H5.35208L4.18542 1.16667H1.16667V8.16667ZM1.16667 8.16667V1.16667V2.33333V8.16667Z"
+            fill="#434654"
+          />
+        </svg>
+        <span className="label-sm text-slate-2">New Project Invitation</span>
+      </h5>
+      <h3 className="text-center text-slate-3 headline-lg">
+        You&apos;ve been invited to join <br /> new project
+      </h3>
+      <Button
+        onClick={() => handleAcceptInvitation()}
+        className="w-full flex items-center justify-center gap-2"
+        disabled={isLoading}
+      >
+        {isLoading && <Spinner />}
+        Accept Invitation
+      </Button>
+    </div>
+  );
+};
+
+export default AcceptInvitation;
