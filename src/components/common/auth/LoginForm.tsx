@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "react-toastify";
 
@@ -22,6 +22,7 @@ import MailIcon from "../../icons/mailIcon";
 
 const LoginForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const {
@@ -67,8 +68,8 @@ const LoginForm = () => {
         toast.success("Logged in successfully!");
         reset();
 
-        // Redirect to main page
-        router.push("/project");
+        const redirectTo = searchParams.get("redirect") || "/project";
+        router.push(redirectTo);
       }
     } catch (error) {
       toast.error("Login failed. Please try again.");
