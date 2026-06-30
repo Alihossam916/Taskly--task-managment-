@@ -1,10 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import sidebarReducer from "./feature/sidebarSlice";
 import taskModalReducer from "./feature/taskModalSlice";
+import membersModalReducer from "./feature/membersModalSlice";
 
 export const makeStore = () => {
   return configureStore({
-    reducer: { sidebar: sidebarReducer, taskModal: taskModalReducer },
+    reducer: {
+      sidebar: sidebarReducer,
+      taskModal: taskModalReducer,
+      membersModal: membersModalReducer,
+    },
   });
 };
 

@@ -20,7 +20,7 @@ import EyeIcon from "../../icons/eyeIcon";
 import LockIcon from "../../icons/lockIcon";
 import MailIcon from "../../icons/mailIcon";
 
-const LoginForm = () => {
+const LoginForm = ({ redirectTo }: { redirectTo?: string }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -67,8 +67,7 @@ const LoginForm = () => {
         toast.success("Logged in successfully!");
         reset();
 
-        // Redirect to main page
-        router.push("/project");
+        router.push(redirectTo || "/project");
       }
     } catch (error) {
       toast.error("Login failed. Please try again.");

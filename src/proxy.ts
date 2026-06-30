@@ -19,7 +19,10 @@ export async function proxy(request: NextRequest) {
 
   // Not logged in → redirect to login, except for auth pages
   if (!isLoggedIn && !isAuthPage) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const redirectTo = pathname + request.nextUrl.search;
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("redirect", redirectTo);
+    return NextResponse.redirect(loginUrl);
   }
 
   // Logged in and on root → redirect to /project
