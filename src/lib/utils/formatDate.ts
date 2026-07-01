@@ -8,3 +8,5 @@ export function formatDate(date: string | Date | undefined | null): string {
     year: "numeric",
   });
 }
+export const toDateInputValue = (date?: string | null) =>
+  date ? date.slice(0, 10) : "";
