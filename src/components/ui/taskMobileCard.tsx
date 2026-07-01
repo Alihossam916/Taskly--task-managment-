@@ -25,7 +25,7 @@ const TaskMobileCard = ({ task, projectId }: TaskMobileCardProp) => {
           openTaskDetails({
             taskId: task.id,
             projectId,
-            epicId: task.epic_id,
+            epicId: task.epic_id || null,
           }),
         )
       }
