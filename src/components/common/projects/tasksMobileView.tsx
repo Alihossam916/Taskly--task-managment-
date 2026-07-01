@@ -166,7 +166,7 @@ const TasksMobileView = ({
         </div>
       )}
 
-      <TaskDetailsMobile onTaskUpdated={handleTaskUpdated}/>
+      <TaskDetailsMobile />
     </div>
   );
 };
