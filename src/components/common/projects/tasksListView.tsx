@@ -25,6 +25,7 @@ const TasksListView = ({
   limit,
   offset,
 }: TaskViewProps) => {
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [tasks, setTasks] = useState<Task[] | null>([]);
   const [totalTasks, setTotalTasks] = useState<number>(0);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -44,7 +45,7 @@ const TasksListView = ({
           offset,
           q || undefined,
         );
-        
+
         setTasks(tasksData?.tasks || null);
         setTotalTasks(tasksData?.total || 0);
       } catch {
@@ -74,6 +75,10 @@ const TasksListView = ({
       return { items: res.tasks, total: res.total };
     },
   );
+
+  const handleTaskUpdated = () => {
+    setRefreshTrigger((prev) => prev + 1);
+  };
 
   if (initialLoading) {
     return <TasksListSkeleton />;
@@ -153,7 +158,7 @@ const TasksListView = ({
       >
         +
       </Link>
-      <TaskDetailsModal />
+      <TaskDetailsModal onTaskUpdated={handleTaskUpdated} />
     </div>
   );
 };

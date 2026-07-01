@@ -31,7 +31,6 @@ import Spinner from "../../ui/spinner";
 // icons
 import EpicIdIcon from "../../icons/epicIdIcon";
 import DateIcon from "../../icons/dateIcon";
-import UnassignedIcon from "../../icons/unassignedIcon";
 import EpicDeadlineInput from "./updateEpic/epicDeadlineInput";
 
 interface EpicDetailsModalProps {
@@ -51,14 +50,9 @@ const EpicDetailsModal = ({
 }: EpicDetailsModalProps) => {
   const [epic, setEpic] = useState<Epic | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [editMode, setEditMode] = useState({
-    assignee: false,
-    deadline: false,
-  });
   const router = useRouter();
 
   //   initials
-  const assigneeInitials = getInitials(epic?.assignee?.name);
   const creatorInitials = getInitials(epic?.created_by.name);
 
   const methods = useForm<AddEpicFormData>({
@@ -119,11 +113,6 @@ const EpicDetailsModal = ({
         getEpicDetails(projectId, epicId),
       ]);
       setEpic(response[0]);
-
-      setEditMode({
-        assignee: false,
-        deadline: false,
-      });
 
       toast.success("Epic updated successfully!");
       router.refresh();

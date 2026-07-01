@@ -80,7 +80,7 @@ const TaskList = ({ projectId, epic, onClose }: TaskListProp) => {
                     openTaskDetails({
                       taskId: task.id,
                       projectId,
-                      epicId: task.epic_id,
+                      epicId: task.epic_id || null,
                     }),
                   );
                 }}

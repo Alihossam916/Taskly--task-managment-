@@ -62,17 +62,31 @@ export interface AssigneeTask {
   department: string | null;
   id: string;
 }
+export interface EpicTask {
+  id: string;
+  title: string;
+  epic_id: string;
+}
 export interface Task {
   id: string;
   task_id: string;
-  epic_id?: string;
+  epic_id?: string | null;
   project_id: string;
   title: string;
-  description?: string;
-  due_date?: string;
+  description?: string | null;
+  due_date?: string | null;
   created_at: string;
   created_by: CreatedByTask;
+  epic?: EpicTask;
   assignee?: AssigneeTask;
+  status: string;
+}
+export interface TaskDetails {
+  title: string;
+  description: string | null;
+  assignee_id: string;
+  due_date: string | null;
+  epic_id: string | null;
   status: string;
 }
 

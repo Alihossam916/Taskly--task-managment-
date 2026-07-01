@@ -35,6 +35,7 @@ const TasksBoardView = ({
   projectId: string;
   limit: number;
 }) => {
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [tasksByStatus, setTasksByStatus] = useState<TasksByStatus>({});
   const [initialLoading, setInitialLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -83,7 +84,7 @@ const TasksBoardView = ({
       }
     }
     fetchData();
-  }, [projectId, limit, q, retryTrigger]);
+  }, [projectId, limit, q, retryTrigger, refreshTrigger]);
 
   const loadMoreForStatus = useCallback(
     async (status: string) => {
@@ -172,6 +173,10 @@ const TasksBoardView = ({
     }
   };
 
+  const handleTaskUpdated = () => {
+    setRefreshTrigger((prev) => prev + 1);
+  };
+
   if (initialLoading) {
     return (
       <div className="hidden sm:block">
@@ -238,7 +243,7 @@ const TasksBoardView = ({
               </Droppable>
             );
           })}
-          <TaskDetailsModal />
+          <TaskDetailsModal onTaskUpdated={handleTaskUpdated}/>
         </section>
       </DragDropContext>
     </div>

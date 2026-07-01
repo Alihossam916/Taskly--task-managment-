@@ -78,11 +78,7 @@ const StatusColumn = ({
       <div className="flex flex-col gap-4 mt-4 w-full h-96 overflow-auto">
         {tasks.map((task, index) => {
           return (
-            <Draggable
-              key={task.task_id}
-              draggableId={task.task_id}
-              index={index}
-            >
+            <Draggable key={task.id} draggableId={task.task_id} index={index}>
               {(provided) => (
                 <div
                   ref={provided.innerRef}
@@ -93,7 +89,7 @@ const StatusColumn = ({
                       openTaskDetails({
                         taskId: task.id,
                         projectId,
-                        epicId: task.epic_id,
+                        epicId: task.epic_id || null,
                       }),
                     )
                   }
