@@ -24,6 +24,7 @@ const TasksMobileView = ({
   limit,
   offset,
 }: TaskViewProps) => {
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [tasks, setTasks] = useState<Task[] | null>([]);
   const [totalTasks, setTotalTasks] = useState<number>(0);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -88,6 +89,9 @@ const TasksMobileView = ({
       return { items: res.tasks, total: res.total };
     },
   );
+  const handleTaskUpdated = () => {
+    setRefreshTrigger((prev) => prev + 1);
+  };
 
   if (initialLoading) {
     return (
@@ -162,7 +166,7 @@ const TasksMobileView = ({
         </div>
       )}
 
-      <TaskDetailsMobile />
+      <TaskDetailsMobile onTaskUpdated={handleTaskUpdated}/>
     </div>
   );
 };
