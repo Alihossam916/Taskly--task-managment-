@@ -23,7 +23,7 @@ const taskModalSlice = createSlice({
       action: PayloadAction<{
         taskId: string;
         projectId: string;
-        epicId?: string;
+        epicId: string | null;
       }>,
     ) {
       state.taskDetailsOpen = true;
