@@ -40,6 +40,7 @@ const ProjectEpicsList = ({
   limit,
   hasError = false,
 }: ProjectEpicsListProps) => {
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [selectedEpic, setSelectedEpic] = useState<Epic | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -92,12 +93,7 @@ const ProjectEpicsList = ({
     currentPage,
     limit,
     async (l, o) => {
-      const res = await getProjectEpics(
-        projectId,
-        l,
-        o,
-        q || undefined,
-      );
+      const res = await getProjectEpics(projectId, l, o, q || undefined);
       if (!res) return null;
       return { items: res.epics, total: res.total };
     },
@@ -106,6 +102,10 @@ const ProjectEpicsList = ({
   const handleEpicClick = (epic: Epic) => {
     setSelectedEpic(epic);
     setIsModalOpen(true);
+  };
+
+  const handleTaskUpdated = () => {
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   return (
@@ -219,7 +219,9 @@ const ProjectEpicsList = ({
                       </div>
                     </div>
                     <div className="sm:hidden">
-                      <p className="text-slate-2 uppercase label-sm">deadline</p>
+                      <p className="text-slate-2 uppercase label-sm">
+                        deadline
+                      </p>
                       <p className="text-slate-3 body-md">
                         {formatDate(epic.deadline)}
                       </p>
@@ -281,7 +283,7 @@ const ProjectEpicsList = ({
       >
         +
       </Link>
-      <TaskDetailsModal />
+      <TaskDetailsModal onTaskUpdated={handleTaskUpdated} />
       <TaskDetailsMobile />
     </div>
   );
